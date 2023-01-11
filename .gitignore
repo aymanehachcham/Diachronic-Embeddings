@@ -1,0 +1,11 @@
+*.aux
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.toc
+*.mp4
+*.zip
+*.fdb_latexmk
