@@ -31,7 +31,6 @@ market
 center
 think
 going
-thing
 place
 called
 court
@@ -85,7 +84,6 @@ union
 story
 record
 stock
-south
 college
 officer
 agency
@@ -106,20 +104,16 @@ although
 friday
 television
 local
-already
 control
 meeting
 quarter
 military
-expected
-death
 study
 history
 increase
 north
 course
 information
-along
 offer
 committee
 community
@@ -134,8 +128,6 @@ march
 economic
 project
 thought
-museum
-working
 financial
 close
 county
