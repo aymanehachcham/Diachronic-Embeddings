@@ -43,11 +43,6 @@ class OxfordDictAPI():
         if self.sentences is not None:
             return list(sent['text'] for sent in self.sentences if sent['senseIds'][0] == id)
 
-    def poly_words(self, num_senses: int):
-        for word in all_words:
-            if len(word) > num_senses:
-                yield (word[0]['word'], word)
-
     def get_senses(self) -> List[Dict]:
         self.res_entries = requests.get(
             self.url_entries,
