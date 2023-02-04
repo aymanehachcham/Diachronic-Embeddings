@@ -9,6 +9,7 @@
 *.mp4
 *.zip
 *.fdb_latexmk
+.idea/
 Seminar/
 articles_raw_data/
 embeddings/
