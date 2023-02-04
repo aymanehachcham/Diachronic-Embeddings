@@ -10,3 +10,6 @@
 *.zip
 *.fdb_latexmk
 Seminar/
+articles_raw_data/
+embeddings/
+.DS_Store
