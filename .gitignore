@@ -14,3 +14,4 @@ Seminar/
 articles_raw_data/
 embeddings/
 .DS_Store
+src/API_credentials

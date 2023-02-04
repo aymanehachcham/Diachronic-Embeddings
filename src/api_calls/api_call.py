@@ -3,18 +3,34 @@ from requests.models import Response
 import json
 from typing import List, Dict
 from itertools import chain
+import os
 
+API_CREDENTIALS = '../API_credentials/oxford_api_credentials.txt'
+def load_credentials(path:str):
+    if os.path.exists(path):
+        with open(path) as f: creds = f.read()
+        api_creds = {}
+        api_creds['Accept'] = creds.split('\n')[0].split(':')[1].strip()
+        api_creds['app_id'] = creds.split('\n')[1].split(':')[1].strip()
+        api_creds['app_key'] = creds.split('\n')[2].split(':')[1].strip()
+        api_creds['url'] = creds.split('\n')[3].split(':', 1)[1].strip()
+
+        return api_creds
+    else:
+        raise ValueError(
+            'Path given does not exist: {}'.format(path)
+        )
 
 class OxfordDictAPI():
     def __init__(
             self,
             word_id: str
     ):
-
+        self.api_creds = load_credentials(API_CREDENTIALS)
         self.headers = {
-            "Accept": "application/json",
-            "app_id": "8beabadc",
-            "app_key": "4d85f3e2e7cd293da9a811f156c99841"
+            "Accept": self.api_creds['Accept'],
+            "app_id": self.api_creds['app_id'],
+            "app_key": self.api_creds['app_key']
         }
 
         if isinstance(word_id, str):
@@ -25,8 +41,8 @@ class OxfordDictAPI():
             )
 
         self.query = ('entries', 'sentences')
-        self.url_ent = 'https://od-api.oxforddictionaries.com/api/v2/{}/en/'.format(self.query[0])
-        self.url_sent = 'https://od-api.oxforddictionaries.com/api/v2/{}/en/'.format(self.query[1])
+        self.url_ent = '{}/{}/en/'.format(self.api_creds['url'], self.query[0])
+        self.url_sent = '{}/{}/en/'.format(self.api_creds['url'], self.query[1])
         self.strict_match = '?strictMatch=true'
 
         self.url_entries = self.url_ent + self.word + self.strict_match
@@ -100,3 +116,5 @@ class OxfordDictAPI():
 
             self.senses.append(sense_with_examples.copy())
         return self.senses
+
+print(OxfordDictAPI('love').get_senses())
