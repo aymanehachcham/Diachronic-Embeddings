@@ -1,0 +1,1 @@
+['state', 'right', 'around', 'black', 'force', 'interest', 'support', 'charge']
