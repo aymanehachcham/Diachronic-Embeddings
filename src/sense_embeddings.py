@@ -93,7 +93,6 @@ def create_sense_embeddings():
 
 
 if __name__ == '__main__':
-    # print(ExtractSenseEmbeddings().__call__(sense_ex).infer_mean_vector())
     import json
     with open('../data/target_words/senses_embeddings.json', 'w') as f:
             json.dump(create_sense_embeddings(), f, indent=4)
