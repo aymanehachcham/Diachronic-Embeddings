@@ -110,6 +110,24 @@
                 "Mrs. Siddons was a first state with the coveted blotted edge.",
                 "an oblong plate, dry point, first state of eight"
             ]
+        },
+        {
+            "word": "state",
+            "sense": "m_en_gbus0989430.034",
+            "definition": "express something definitely or clearly in speech or writing",
+            "examples": [
+                "the report stated that more than 51 per cent of voters failed to participate",
+                "\u2018Money hasn't changed me,\u2019 she stated firmly",
+                "people will be invited to state their views"
+            ]
+        },
+        {
+            "word": "state",
+            "sense": "m_en_gbus0989430.042",
+            "definition": "present or introduce (a theme or melody) in a composition",
+            "examples": [
+                "a bold theme is stated at the beginning, driving the entire ten-minute allegro"
+            ]
         }
     ],
     [
@@ -251,6 +269,92 @@
                 "The only aggressive magick I've done was directed towards a right cow in the last place I worked.",
                 "Looking back I suppose it was quite comical, we must have looked like a right old married couple.",
                 "I felt a right idiot"
+            ]
+        },
+        {
+            "word": "right",
+            "sense": "m_en_gbus0873500.028",
+            "definition": "to the furthest or most complete extent or degree (used for emphasis)",
+            "examples": [
+                "the car spun right off the track",
+                "I'm right out of ideas"
+            ]
+        },
+        {
+            "word": "right",
+            "sense": "m_en_gbus0873500.034",
+            "definition": "correctly",
+            "examples": [
+                "he had guessed right"
+            ]
+        },
+        {
+            "word": "right",
+            "sense": "m_en_gbus0873500.037",
+            "definition": "on or to the right side",
+            "examples": [
+                "turn right off the B1269"
+            ]
+        },
+        {
+            "word": "right",
+            "sense": "m_en_gbus0873500.040",
+            "definition": "that which is morally correct, just, or honourable",
+            "examples": [
+                "she doesn't understand the difference between right and wrong",
+                "the rights and wrongs of the matter"
+            ]
+        },
+        {
+            "word": "right",
+            "sense": "m_en_gbus0873500.043",
+            "definition": "a moral or legal entitlement to have or do something",
+            "examples": [
+                "she had every right to be angry",
+                "you're quite within your rights to ask for your money back",
+                "there is no right of appeal against the decision"
+            ]
+        },
+        {
+            "word": "right",
+            "sense": "m_en_gbus0873500.049",
+            "definition": "the right-hand part, side, or direction",
+            "examples": [
+                "take the first turning on the right",
+                "she seated me on her right"
+            ]
+        },
+        {
+            "word": "right",
+            "sense": "m_en_gbus0873500.058",
+            "definition": "a group or party favouring right-wing or conservative views",
+            "examples": [
+                "the Right got in at the election",
+                "his proposal was viewed with alarm by the right of the party"
+            ]
+        },
+        {
+            "word": "right",
+            "sense": "m_en_gbus0873500.064",
+            "definition": "restore to a normal or upright position",
+            "examples": [
+                "we righted the capsized dinghy"
+            ]
+        },
+        {
+            "word": "right",
+            "sense": "m_en_gbus0873500.071",
+            "definition": "restore to a normal or correct state",
+            "examples": [
+                "righting the economy demanded major cuts in defence spending"
+            ]
+        },
+        {
+            "word": "right",
+            "sense": "m_en_gbus0873500.085",
+            "definition": "used to indicate agreement or to acknowledge a statement or order",
+            "examples": [
+                "righting the economy demanded major cuts in defence spending"
             ]
         }
     ],
@@ -423,118 +527,40 @@
                 "software costs would be around \u00a31,500",
                 "I returned to my hotel around 3 a.m"
             ]
-        }
-    ],
-    [
+        },
         {
-            "word": "black",
-            "sense": "m_en_gbus0099760.006",
-            "definition": "of the very darkest colour owing to the absence of or complete absorption of light; the opposite of white",
+            "word": "around",
+            "sense": "m_en_gbus0048020.038",
+            "definition": "on every side of",
             "examples": [
-                "The first attacker was 6ft tall with short blond hair and was wearing black trousers and a white T-shirt.",
-                "Bundles of chemical sticks lay ready to be burnt in it, some making black smoke and some white.",
-                "The video showed a white truck exploding and black plumes of smoke billowing into the air.",
-                "The first girl, with short black hair and a light, kind sounding voice scampered up to her.",
-                "Her hair looked almost black in the dim light, but I later found out it was just a sort of dark brown.",
-                "The door suddenly swung open and a tall man with short black hair and light brown eyes was staring at me.",
-                "He had dark coloured hair and was wearing black jeans and white runners.",
-                "Long wavy black hair and light blue eyes created a contrast that was breathtaking.",
-                "He had blond hair and was wearing a light coloured jacket, white trousers and black shoes.",
-                "It is coloured golden brown above and white below with a black stripe down the sides of its neck.",
-                "There's no need for our older buildings to remain grey, black and white. Colour is good.",
-                "He has white hair and a black suit and a watch chain across his meagre belly.",
-                "I wore a white blouse and a black skirt and I pinned my hair back with a hair pin.",
-                "The dashboard glows red and white against its black background.",
-                "I quickly strip out of my crisp black suit and dash in the bathroom for a quick shower.",
-                "These men are wearing suits or their coolest black club clothes on a cold evening in November.",
-                "Some chose to outline their sketch with permanent black marker before adding the color.",
-                "In a shallow depression of granite, I noticed what appeared to be a large black insect.",
-                "She looked down at the black kitten, and started to pet its head, as it began to purr.",
-                "Smoothing the mane of her black stallion, she can hear the sigh of her friend.",
-                "black smoke",
-                "her long black hair",
-                "a beautiful black dress"
+                "the palazzo is built around a courtyard",
+                "the hills around the city"
             ]
         },
         {
-            "word": "black",
-            "sense": "m_en_gbus0099760.018",
-            "definition": "belonging to or denoting a human group having dark-coloured skin, especially of sub-Saharan African ancestry.",
+            "word": "around",
+            "sense": "m_en_gbus0048020.042",
+            "definition": "in or to many places throughout (a community or locality)",
             "examples": [
-                "He set a big example for the rest of the country and for all black South Africans.",
-                "Less than half of all black citizens think that parliament is interested in what they think.",
-                "Many Black Americans take great pride in their African ancestry.",
-                "Affirmative action programs aim to provide more Black doctors to serve Black patients.",
-                "When we enter the airport, a black man in a suit motions for us to come to him.",
-                "Few black miners held leadership positions at the level of president of the union local.",
-                "He argued that if a few black people get into high profile positions every black person benefits.",
-                "He was with a black man aged 18-20, wearing dark clothing and glasses.",
-                "The next enrolled participant is a black woman aged 52, who is a non-smoker.",
-                "He is part of a new generation of Black artists who are bringing their eclectic cultural experiences to dance.",
-                "In the pole vault, he became the first Black American to win a major title in the event.",
-                "This question must be answered by the institutions that are now spending million of pounds in support of black artists.",
-                "I love learning about the history, especially Black history.",
-                "His portraits of predominantly black figures encompass actors, musicians, politicians, and civil rights leaders.",
-                "She taught for a brief stint in Atlanta at two historically Black universities.",
-                "Black people have contributed to what is now a diverse and multicultural society.",
-                "The report said brands must embrace the talent of Black creatives or risk becoming obsolete.",
-                "He has met with Black students to hear their concerns.",
-                "The black community has enriched the city in a direct and indirect way.",
-                "She is the first Black woman to pilot a space flight.",
-                "the entire cast is black",
-                "he discusses the position of Black people in America",
-                "the Black community"
+                "cycling around the village",
+                "a number of large depots around the country"
             ]
         },
         {
-            "word": "black",
-            "sense": "m_en_gbus0099760.022",
-            "definition": "characterized by tragic or disastrous events; causing despair or pessimism",
+            "word": "around",
+            "sense": "m_en_gbus0048020.044",
+            "definition": "so as to pass (a place or object) in a curved or approximately circular route",
             "examples": [
-                "Perhaps however the truth lies somewhere in between and the situation is not as black as some perceive it to be.",
-                "In the North East, once ships stopped being built, a black depression hung over the region.",
-                "It was a black mood at a black moment, a spasm that sentient Americans prefer to forget.",
-                "While he might feel he stands under a black cloud at present, that flash of light you can see is a silver lining for York.",
-                "But the worst was an old bird who shouted at me about the poll tax and blamed me for Black Wednesday.",
-                "There is evidently much that is right, or even outstanding, about France, so one should not paint too black a picture.",
-                "Without tempting fate, no young lives have been lost in road accidents since that black day last year.",
-                "This poll is the conclusion of a very black week in this country's politics.",
-                "five thousand men were killed on the blackest day of the war",
-                "the future looks black"
+                "he walked around the airfield",
+                "it can drill around corners"
             ]
         },
         {
-            "word": "black",
-            "sense": "m_en_gbus0099760.028",
-            "definition": "denoting a covert military procedure",
+            "word": "around",
+            "sense": "m_en_gbus0048020.046",
+            "definition": "so as to encircle or embrace (someone or something)",
             "examples": [
-                "Perhaps however the truth lies somewhere in between and the situation is not as black as some perceive it to be.",
-                "In the North East, once ships stopped being built, a black depression hung over the region.",
-                "It was a black mood at a black moment, a spasm that sentient Americans prefer to forget.",
-                "While he might feel he stands under a black cloud at present, that flash of light you can see is a silver lining for York.",
-                "But the worst was an old bird who shouted at me about the poll tax and blamed me for Black Wednesday.",
-                "There is evidently much that is right, or even outstanding, about France, so one should not paint too black a picture.",
-                "Without tempting fate, no young lives have been lost in road accidents since that black day last year.",
-                "This poll is the conclusion of a very black week in this country's politics.",
-                "five thousand men were killed on the blackest day of the war",
-                "the future looks black"
-            ]
-        },
-        {
-            "word": "black",
-            "sense": "m_en_gbus0099760.030",
-            "definition": "(of goods or work) not to be handled or undertaken by trade union members, especially so as to express support for an industrial dispute elsewhere",
-            "examples": [
-                "Perhaps however the truth lies somewhere in between and the situation is not as black as some perceive it to be.",
-                "In the North East, once ships stopped being built, a black depression hung over the region.",
-                "It was a black mood at a black moment, a spasm that sentient Americans prefer to forget.",
-                "While he might feel he stands under a black cloud at present, that flash of light you can see is a silver lining for York.",
-                "But the worst was an old bird who shouted at me about the poll tax and blamed me for Black Wednesday.",
-                "There is evidently much that is right, or even outstanding, about France, so one should not paint too black a picture.",
-                "Without tempting fate, no young lives have been lost in road accidents since that black day last year.",
-                "This poll is the conclusion of a very black week in this country's politics.",
-                "five thousand men were killed on the blackest day of the war",
-                "the future looks black"
+                "he put his arm around her"
             ]
         }
     ],
@@ -674,6 +700,31 @@
                 "Charles sought peace at home and abroad by putting together a military force.",
                 "Where once hundreds of US airmen paraded, police officers from Scotland's seven forces now patrol.",
                 "a British peacekeeping force"
+            ]
+        },
+        {
+            "word": "force",
+            "sense": "m_en_gbus0379760.032",
+            "definition": "make a way through or into by physical strength; break open by force",
+            "examples": [
+                "the back door of the bank was forced"
+            ]
+        },
+        {
+            "word": "force",
+            "sense": "m_en_gbus0379760.043",
+            "definition": "make (someone) do something against their will",
+            "examples": [
+                "she was forced into early retirement",
+                "the universities were forced to cut staff"
+            ]
+        },
+        {
+            "word": "force",
+            "sense": "m_en_gbus0379770.003",
+            "definition": "a waterfall",
+            "examples": [
+                "at the village of West Burton, two miles distant, is a fine force"
             ]
         }
     ],
@@ -820,6 +871,14 @@
                 "Business interests think they know he's on their side, so they're inclined to give him the benefit of the doubt.",
                 "food interests in Scotland must continue to invest"
             ]
+        },
+        {
+            "word": "interest",
+            "sense": "m_en_gbus0515570.025",
+            "definition": "excite the curiosity or attention of (someone)",
+            "examples": [
+                "I thought the book might interest Eliot"
+            ]
         }
     ],
     [
@@ -928,151 +987,97 @@
                 "Grief can be supported and facilitated, and depression can be treated.",
                 "at work during the day I could support the grief"
             ]
+        },
+        {
+            "word": "support",
+            "sense": "m_en_gbus1015970.031",
+            "definition": "a thing that bears the weight of something or keeps it upright",
+            "examples": [
+                "the best support for a camera is a tripod"
+            ]
+        },
+        {
+            "word": "support",
+            "sense": "m_en_gbus1015970.037",
+            "definition": "material assistance",
+            "examples": [
+                "the bank provided unstinting financial support",
+                "air operations in support of British forces"
+            ]
+        },
+        {
+            "word": "support",
+            "sense": "m_en_gbus1015970.043",
+            "definition": "evidence that serves to corroborate something",
+            "examples": [
+                "the study provides support for both theories"
+            ]
         }
     ],
     [
         {
-            "word": "charge",
-            "sense": "m_en_gbus0169930.006",
-            "definition": "demand (an amount) as a price for a service rendered or goods supplied",
+            "word": "please",
+            "sense": "m_en_gbus0789530.006",
+            "definition": "cause to feel happy and satisfied",
             "examples": [
-                "Much confusion exists regarding the tariff payable by the medical aid funds and the amount charged by the various service providers or institutions.",
-                "By January, the billings department had yet to charge Bitton for services rendered.",
-                "For the amount of money they charge for the ticket, the service should be much better.",
-                "There is a range of prices open to you to charge for your services.",
-                "He said motorists who complained after pumping their own fuel at full service pumps and being charged the higher price were offered a refund.",
-                "Of the 126 who responded, 81 per cent agreed that it was reasonable for the council to charge an adequate amount for services provided.",
-                "Right now I have no life coaching qualifications or experience, and so I don't feel qualified to charge for my services.",
-                "Representations made to the rail authorities about the high prices they charge for improvements had also been made, without success.",
-                "And if you use your card abroad to take out local currency, almost all banks and building societies charge for this service.",
-                "With Lynne's help, the charity, which has to charge for its services because funding is so tight, hopes to be able to expand.",
-                "It was also possible to arrange an item of mail to be left at a convenient Post Office though the Post Office would charge for this service.",
-                "Although banks have a standard penalty rate, it is worth asking the amount your bank will charge for the delay.",
-                "The council admits that few boroughs charge for children's services.",
-                "There is no word as to whether they will charge for this service or not.",
-                "The council is facing a \u00a311.5million shortfall if it charges the average amount of council tax for outer London.",
-                "The province requires us to charge the same low price to all our clients, yet many of them are affluent and could easily afford to pay more.",
-                "They charge a premium amount in the UK for their printing services and the sums simply don't add up.",
-                "The council is currently reviewing the amount it charges people to use the town's car parks.",
-                "This is partly for financial reasons, as the council charges a fee to cover its costs, meaning some schools choose not to run the training classes.",
-                "He said three years ago, homeowners were conned in a fraud worth more than \u00a3500,000 when they were charged excessive amounts to have their drives resurfaced.",
-                "wedding planners may charge an hourly fee of up to \u00a3150",
-                "he charged me five dollars for the wine"
+                "He said it pleased him, and he was flattered not offended\u2026",
+                "When they told me where they lived I had no idea where Downpatrick was, and it pleased me that now I had a passing acquaintance with the place.",
+                "It pleased me somehow to be weathered by this deadly wind on my face and to be exposed to a gorgeous icy glare on this sunny afternoon.",
+                "It pleased me no end, trying to make amends for many years of imposed suppression.",
+                "It grieved her for the same reason it pleased her.",
+                "I could hear a smile over the line and it pleased me.",
+                "Yet Katherine saw the small mistake, and it pleased her.",
+                "It pleased me to know that he was a very good conversationalist, and was capable of holding intelligent conversation for more than two seconds.",
+                "It pleased Maria to see Isabella able to enjoy herself again.",
+                "I knew they were just anxious to get started, and it pleased me.",
+                "It pleased him to know that he might go on, far away from this place.",
+                "And there can be little doubt that, if nothing else, it pleased the Commission and Commissioner.",
+                "It pleased him so much to see her doing new things and living her life.",
+                "All we can say is that it pleased the Lord to do this.",
+                "The dancers before him danced and twirled just for him and it pleased him.",
+                "It pleased him, though he couldn't think of any useful advice he'd given.",
+                "Now only happiness lay before them and it pleased her well.",
+                "Though it pleased them that the fight was finally over, their losses were overwhelming.",
+                "He loved the city and it pleased him that she was interested in its history.",
+                "It pleased me to see New Jersey State Troopers out in force at the Newark airport.",
+                "he arranged a fishing trip to please his son",
+                "\n              it pleased him to be seen with someone in the news"
             ]
         },
         {
-            "word": "charge",
-            "sense": "m_en_gbus0169930.014",
-            "definition": "formally accuse (someone) of something, especially an offence under law",
+            "word": "please",
+            "sense": "m_en_gbus0789530.015",
+            "definition": "take only one's own wishes into consideration in deciding how to act or proceed",
             "examples": [
-                "He was also charged with the offence of disobeying a lawful order.",
-                "He was charged with the offence of which he was convicted and at that time handed in a prepared statement.",
-                "On no occasion has he been charged with any offence, has no outstanding charges and I strongly doubt that there would be any adverse record against him, at least at the national level.",
-                "In July 2002, he was charged with three drug-related offences.",
-                "He was not charged with that offence, as I understand it.",
-                "The applicant's girlfriend was not charged with any offences in connection with these seizures.",
-                "On 21st April, she was charged with the offence I have mentioned, that of assisting an offender.",
-                "He was charged with two criminal offences, and was acquitted of both offences.",
-                "On 16th June, nearly five months after the incidents, he was charged with both offences.",
-                "The man was acquitted but the young women were charged with perjury.",
-                "She was charged with 12 offences at crown court, and a further three in the magistrates' court.",
-                "In many cases, drivers are not charged with an offence: police deem the pedestrian to have been \u2018at fault\u2019 in the accident.",
-                "However she was charged with two offences of false accounting concerning housing benefit fraud.",
-                "However, on December 24 he was formally charged with illegally acquiring and sharing information.",
-                "Police and fire crews labelled him \u2018a stupid fool\u2019 for putting his and other people's lives at risk but he was not charged with any offence.",
-                "Originally he was charged with 16 offences, but yesterday they were withdrawn and five sample charges were substituted.",
-                "When he finally came down he was charged with offences including driving without insurance and threatening behaviour.",
-                "He was subsequently charged with a disciplinary offence, but was cleared following a hearing in May.",
-                "If someone is charged with an offence then they must face the full impact of the law.",
-                "they were charged with assault"
+                "If you're just pleasing yourself, why not save it for home?",
+                "By the end of the week you feel much better, and paradoxically by pleasing yourself your partner is also satisfied.",
+                "All over the country, harassed parents are frantically trying to decide how to entertain their offspring, rather than pleasing themselves.",
+                "They're most interested in pleasing themselves, like some of the people you're forced to deal with.",
+                "Everybody was just into pleasing themselves, to such a point that there was no room for any relationship.",
+                "On the show, there's this really delicate balance between pleasing ourselves, just making ourselves happy, and making the audience happy.",
+                "I have often found myself out of balance with worry about what others think at the expense of pleasing myself.",
+                "Busier than ever, she is happily married with two young children and plans to spend her fifties pleasing herself and exploring other avenues.",
+                "They didn't do it to please themselves or just one guy.",
+                "They please themselves whether they serve or not.",
+                "Unfortunately, there are still some parish councillors who get elected or co-opted and then believe they can please themselves.",
+                "The healthy freaks will please themselves with the newest diet and healthy food.",
+                "We wanted to please ourselves and be one of the best bands we would want to see live, and make some of the best records that we would have in our record collection.",
+                "Yes, we aim to please others; however, I firmly believe we should please ourselves first.",
+                "The glory of being older is that we can be ourselves and please ourselves.",
+                "I've come to the realisation, at 57, that I have to do things that please myself, and if people like them that's a bonus.",
+                "I was trying so hard to please myself, I was turning into somebody else.",
+                "I tend to follow my instincts and please myself.",
+                "I don't conform unless I choose to, and, frankly, I please myself.",
+                "this is the first time in ages that I can just please myself"
             ]
         },
         {
-            "word": "charge",
-            "sense": "m_en_gbus0169930.018",
-            "definition": "entrust (someone) with a task as a duty or responsibility",
+            "word": "please",
+            "sense": "m_en_gbus0789530.019",
+            "definition": "used in polite requests or questions",
             "examples": [
-                "We are social creatures, and as well as taking responsibility for ourselves we are charged with the duty of looking out for our nearest and dearest.",
-                "Every player is charged with the responsibility of making the performance an engaging experience for both the cast and the audience.",
-                "The two teams were charged with the task of selling ice-creams in down-town Manhattan.",
-                "She is charged with the task of ensuring the government's lifelong learning plans make sense to the public.",
-                "Yet he and virtually the same team were again charged with the task of winning a major tournament for Scotland.",
-                "Israeli-employed post office workers were charged with the task of verifying the identities of potential voters.",
-                "Indeed, these individuals are charged with the responsibility of public safety.",
-                "David Moore was charged with the task of taking the firm forward after Mr Lancaster retired in 2003.",
-                "Logistics leaders are charged with the duty to organize, train and equip the units under their command",
-                "As part of my intelligence duties, I was charged with interrogating German prisoners of war.",
-                "There are a lot of people who are charged with the responsibility of protecting, promoting and defending that reputation.",
-                "Governments are charged with a difficult responsibility of balancing economic development against environmental damage.",
-                "On the following day, he was charged with the duty of getting rid of these shares.",
-                "The news media are not charged with the duty of full court reporting, and it is necessarily fortuitous as to whether remarks upon sentence are reported or not.",
-                "In fairness to the land commissioner, he isn't charged with protecting local school revenue.",
-                "Additionally, he stood by and watched as laws were being broken by said children that he was charged to protect.",
-                "Those who knew these men intimately were charged with the duty to relate their heroic deaths to their families upon returning to the Capital.",
-                "The Board and district commissions are charged to protect and conserve the lands and environment of the state.",
-                "All three are equally charged to protect the Constitution.",
-                "Clearly, this senior level review charged to protect the public interest fully weighed all the issues, separating fact from assertion.",
-                "the committee was charged with reshaping the educational system"
-            ]
-        },
-        {
-            "word": "charge",
-            "sense": "m_en_gbus0169930.020",
-            "definition": "store electrical energy in (a battery or battery-operated device)",
-            "examples": [
-                "A large assemblage of tiny little storage batteries were charged up and gave a total, when they were all put in a series, of about a thousand volts.",
-                "An electrical charging source couples to the first and second electrical connectors to charge the battery.",
-                "Then at some point we might burn coal to supply electricity to charge batteries in electric cars.",
-                "So anytime you're driving - highway or city - the battery can be charged up if it needs charging, and it should never run low.",
-                "Increase the life span of your cell phone and battery by following the manufacturer's directions for using the phone and charging the battery.",
-                "As you read this, Brian Cashman is charging his ninth cell-phone battery of the day.",
-                "Small, isolated farms used wind turbines to charge batteries, run radios and draw water from deep wells.",
-                "Tonight we took short showers in the outside stained wood stalls, as another generator charged the batteries that ran the water pump and the electric water heater.",
-                "This battery is continuously charged by solar cells and the use of the cell obviates the need for separate charging of the battery.",
-                "It is used to charge the battery and to power all the car's electric systems when its engine is running.",
-                "Diesel-powered submarines use combustion engines to provide power and charge the sub's batteries.",
-                "When the bank's charge drops below a certain level, the pump is shut off and the system resumes charging the batteries from the wind's energy.",
-                "This changes the voltage to direct current which can then be used to charge your battery.",
-                "When the car is slowing down, the electric motor runs backwards, acting as a generator to charge the battery.",
-                "You do have to be organised as it takes forever to charge the batteries, but it is free energy.",
-                "Plug it in to your computer to charge the battery and transfer songs.",
-                "The plasma screen consists of tiny gas plasma cells that are charged at exact electrical voltages to make a picture.",
-                "It is now eleven days later and the big battery is still charged and the camera working perfectly.",
-                "By then, they knew too that the power system was struggling and the battery wasn't charged as much as was desired.",
-                "She made a mental note to plug her charger in and charge the battery.",
-                "the shaver can be charged up and used while travelling"
-            ]
-        },
-        {
-            "word": "charge",
-            "sense": "m_en_gbus0169930.025",
-            "definition": "rush forward in attack",
-            "examples": [
-                "The rest of the attack party charged, all shouting loudly.",
-                "She reached for it but quickly moved as he charged once again.",
-                "They were charging just as quickly, also blinded by chaos.",
-                "As he moved to charge, he found that his father was already upon him.",
-                "Godfrey did not hesitate, but attacked immediately, charging headlong while the Egyptians were still in their camp.",
-                "She charged so quickly at him, all you could see was a black blur.",
-                "He made the first move, he charged at her with his arms at his sides, waiting to strike.",
-                "His opponent charged at him quickly, sword held to the side.",
-                "Quickly three people came charging at him, one was his own teammate.",
-                "The underlying weakness of the hull meant that the ship could not charge headlong in the heat of battle.",
-                "Such forces can rarely be detected ahead of time, but to charge headlong without at least trying to assess your situation is like skipping nonchalantly through a mine field.",
-                "It is intriguing to watch those who run, those who hide, those that charge headlong and those that push their friends in front of themselves for protection.",
-                "It continued its attack on her, charging at her head-first!",
-                "the plan is to charge headlong at the enemy"
-            ]
-        },
-        {
-            "word": "charge",
-            "sense": "m_en_gbus0169930.029",
-            "definition": "place a heraldic bearing on",
-            "examples": [
-                "The Duke of Kent had his label charged with a cross gules between two fleurs-de-lis azure.",
-                "Two other variations are known, one for Woolcot with a chief charged with a cross between two fleur-de-lis, and one for Woolcott with the shield red and a chief with a fleur-de-lis between two red crosses.",
-                "Another illumination also illustrating Combat des Trentes shows the Breton-French knights with a narrow, forked white oriflam, charged with a cross couped.",
-                "a pennant argent, charged with a cross gules"
+                "please address letters to the Editor",
+                "what type of fish is this, please?"
             ]
         }
     ]
