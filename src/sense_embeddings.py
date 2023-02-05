@@ -94,8 +94,6 @@ class VectorEmbeddings():
                 outputs = self.model(self.tokens_tensor, self.segments_tensors)
                 hidden_states = outputs[2]
 
-            print(main_word)
-
             return hidden_states[-2][0][main_token_id]
 
         else:
@@ -142,6 +140,7 @@ def create_sense_embeddings():
 
     all_embeddings = []
     for word in all_words:
+        print('Embedding the word: {} --------- '.format(word[0]['word']))
         output = [sens_embedding(sens).infer_mean_vector() for sens in word]
         all_embeddings.append(output)
 
