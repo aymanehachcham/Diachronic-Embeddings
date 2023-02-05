@@ -114,7 +114,11 @@ class OxfordDictAPI():
                             sense_with_examples['word'] = self.word
                             sense_with_examples['sense'] = sens['id']
                             sense_with_examples['definition'] = sens['definitions'][0]
-                            examples_for_senses = list(ex['text'] for ex in sens['examples'])
+
+                            if 'examples' in sens.keys():
+                                examples_for_senses = list(ex['text'] for ex in sens['examples'])
+                            else:
+                                continue
 
                             if sens['id'] in list(sense_ids):
                                 examples_sense = search(sens['id'])
