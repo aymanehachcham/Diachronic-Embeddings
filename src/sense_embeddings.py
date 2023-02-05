@@ -2,39 +2,9 @@
 import torch
 from transformers import BertTokenizer, BertModel
 from transformers import logging
-import re
 
 
 SENSE_EXAMPLES_FILE = '../data/target_words/senses_oxford_api.json'
-sense_ex = {
-            "word": "state",
-            "sense": "m_en_gbus0989430.006",
-            "definition": "the particular condition that someone or something is in at a specific time",
-            "examples": [
-                "And final confirmation of my poor state of mind from lack of sleep came when Mark returned from going out.",
-                "At times she is combative, at times submissive, according to the situation and her state of mind.",
-                "A positive state of mind is also thought to be of great help in protecting against such problems.",
-                "The cowboy is the archetypal American hero, and the western fits America's current state of mind.",
-                "Hopefully, by moving to the north for a little while, my work will improve and so will my state of mind.",
-                "His state of mind becomes even more troubled when a copy of Rebecca's childhood diary arrives anonymously in the post.",
-                "He will under go a psychiatric examination to determine his state of mind at the time of the killings, he said.",
-                "After that initial catharsis had passed she asked me to fill in some questionnaires so that she could establish my state of mind.",
-                "Unfortunately, in her state of mind she'd forgotten that she had worn a black jacket that night.",
-                "Her research suggests that a little after-work light could lead to being in a better state of mind.",
-                "There is a parallel between his state of mind in the late 1960s and when he wrote the book in the early 1940s.",
-                "I think you've managed to capture my state of mind pretty much exactly.",
-                "Last week's ITV documentary raised serious questions about his state of mind.",
-                "They have also begun examining his computer for clues as to his state of mind and any friends who might not have been known to his parents.",
-                "Lately, I haven't really been in the right state of mind to make decisions.",
-                "I needed to hear words that only he could say, words that would shake me out of my unsettled state of mind.",
-                "Astaphan said a critical point was the state of mind of the defendant when he made the statements.",
-                "I love colour and use it to represent my state of mind - green is my favourite.",
-                "Hopefully I'll have surfaced by Sunday afternoon and will be in a fit state to drive over and pick up the family.",
-                "I have already seen it three times and each time I gain new insights into my own state of mind.",
-                "the state of the company's finances",
-                "we're worried about her state of mind"
-            ]
-        }
 
 class VectorEmbeddings():
     def __init__(
