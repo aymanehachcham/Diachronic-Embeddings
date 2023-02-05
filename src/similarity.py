@@ -8,7 +8,7 @@ from collections import Counter
 import numpy as np
 
 SENSES_FILE = 'embeddings_for_senses.json'
-EXAMPLES_FILE = 'embeddings_1980.json'
+EXAMPLES_FILE = 'embeddings_1990.json'
 WORDS = 'polysemous.txt'
 
 class LoadingEmbeddings():
@@ -97,5 +97,5 @@ if __name__ == '__main__':
     for word in words.split('\n'):
         all_words.append(sim(word))
 
-    with open('../data/target_words/senses_proportions_1980.json', 'w') as f:
+    with open('../data/target_words/senses_proportions_1990.json', 'w') as f:
         json.dump(all_words, f, indent=4)
