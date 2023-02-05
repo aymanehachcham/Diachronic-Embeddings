@@ -1,4 +1,4 @@
-
+import json
 import os
 from api_call import OxfordDictAPI
 
@@ -40,3 +40,8 @@ def poly_words(list_words, num_senses: int):
     for word in list_words:
         if len(word) > num_senses:
             yield (word[0]['word'], word)
+
+
+if __name__ == '__main__':
+    with open('../../data/target_words/senses_oxford_api.json', 'w') as f:
+        json.dump(perform_on_all_words('../../data/target_words/polysemous.txt'), f, indent=4)

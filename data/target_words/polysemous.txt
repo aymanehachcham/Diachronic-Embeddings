@@ -1,1 +1,9 @@
-['state', 'right', 'around', 'black', 'force', 'interest', 'support', 'charge', 'please']
+state
+right
+around
+black
+force
+interest
+support
+charge
+please

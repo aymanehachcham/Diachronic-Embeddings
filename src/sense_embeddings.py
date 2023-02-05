@@ -110,7 +110,6 @@ def create_sense_embeddings():
 
     all_embeddings = []
     for word in all_words:
-        print('Embedding the word: {} --------- '.format(word[0]['word']))
         output = [sens_embedding(sens).infer_mean_vector() for sens in word]
         all_embeddings.append(output)
 
@@ -120,7 +119,7 @@ def create_sense_embeddings():
 
 if __name__ == '__main__':
     import json
-    with open('../data/target_words/embeddings_for_senses.json', 'w') as f:
+    with open('../embeddings/embeddings_for_senses.json', 'w') as f:
             json.dump(create_sense_embeddings(), f, indent=4)
 
 
