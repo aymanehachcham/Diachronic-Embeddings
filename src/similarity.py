@@ -87,5 +87,15 @@ class Similarities():
 
 if __name__ == '__main__':
     import json
-    with open('../data/target_words/', 'w') as f:
-        json.dump(create_sense_embeddings(), f, indent=4)
+
+    sim = Similarities()
+    all_words = []
+
+    with open('../data/target_words/polysemous.txt', 'r') as f:
+        words = f.read()
+
+    for word in words.split('\n'):
+        all_words.append(sim(word))
+
+    with open('../data/target_words/senses_proportions.json', 'w') as f:
+        json.dump(all_words, f, indent=4)
