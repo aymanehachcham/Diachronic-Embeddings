@@ -97,5 +97,5 @@ if __name__ == '__main__':
     for word in words.split('\n'):
         all_words.append(sim(word))
 
-    with open('../data/target_words/senses_proportions.json', 'w') as f:
+    with open('../data/target_words/senses_proportions_1980.json', 'w') as f:
         json.dump(all_words, f, indent=4)
