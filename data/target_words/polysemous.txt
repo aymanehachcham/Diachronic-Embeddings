@@ -1,1 +1,1 @@
-['state', 'right', 'around', 'black', 'force', 'interest', 'support', 'charge', 'please']
+targets = ['abuse', 'administration', 'cold', 'wall', 'aids', 'authority', 'battle', 'black', 'campaign', 'lives', 'head', 'march', 'public', 'release', 'screen', 'shot', 'war', 'union', 'white' ]
