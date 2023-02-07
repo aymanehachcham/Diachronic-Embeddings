@@ -73,7 +73,7 @@ class OxfordDictAPI():
     def _preprocessing(self, sentence:str, main_word:str):
         words = sentence.split()
         for idx, w in enumerate(words):
-            if re.search(main_word[:3], w):
+            if re.search(main_word[:3], w.lower()):
                 words[idx] = main_word
         return ' '.join(words)
 
@@ -150,15 +150,15 @@ class OxfordDictAPI():
 
 
 if __name__ == '__main__':
-    print(OxfordDictAPI('abuse').get_senses())
+    # print(OxfordDictAPI('abuse').get_senses())
 
 
 
 
     # from nltk import WordNetLemmatizer
     # lemmatizer = WordNetLemmatizer()
-    # sentence = 'Last year in Parliament, Labor\'s Craig Emerson accused insurance companies of abusing their market power over small smash repairers.'
-    # main_word = 'abuse'
+    sentence = 'the Welsh Marches'
+    main_word = 'march'
     # def lemmatize_token(tkn):
     #     if lemmatizer.lemmatize(tkn, pos='n') != tkn:
     #         return lemmatizer.lemmatize(tkn, pos='n')
@@ -166,9 +166,9 @@ if __name__ == '__main__':
     #         return lemmatizer.lemmatize(tkn, pos='v')
     #     return lemmatizer.lemmatize(tkn, pos='a')
     #
-    # words = sentence.split()
-    # for idx, w in enumerate(words):
-    #     if re.search(main_word[:3], w):
-    #         words[idx] = main_word
-    #
-    # print(' '.join(words))
+    words = sentence.split()
+    for idx, w in enumerate(words):
+        if re.search(main_word[:3], w.lower()):
+            words[idx] = main_word
+
+    print(' '.join(words))
