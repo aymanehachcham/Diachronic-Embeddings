@@ -1,1 +1,19 @@
-targets = ['abuse', 'administration', 'cold', 'wall', 'aids', 'authority', 'battle', 'black', 'campaign', 'lives', 'head', 'march', 'public', 'release', 'screen', 'shot', 'war', 'union', 'white' ]
+abuse 
+administration
+cold
+wall
+aid
+authority
+battle
+black
+campaign
+live
+head
+march
+public
+release
+screen
+shot
+war
+union
+white

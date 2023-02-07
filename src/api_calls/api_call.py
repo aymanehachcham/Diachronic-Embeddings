@@ -72,9 +72,7 @@ class OxfordDictAPI():
 
         self.senses_examples = self._load_into_json(self.res_entries)
         self.sentences_examples = self._load_into_json(self.res_sentences)
-        api_call_senses = self.senses_examples['results'][0]['lexicalEntries'][0]['entries'][0]['senses']
-        sentences = self.sentences_examples['results'][0]['lexicalEntries'][0]['sentences']
-
+        
         try:
             self.senses_examples['results']
         except KeyError:
@@ -88,33 +86,49 @@ class OxfordDictAPI():
                 'No resutls for senteces'
             )
 
+
+        senses_all_res = self.senses_examples['results']
+        sentences_all_res = self.sentences_examples['results']
+
+
+        
         sense_with_examples = {}
         diff_sense_ids = []
 
-        for el in sentences:
-            diff_sense_ids.append(el['senseIds'][0])
+        for res_s in sentences_all_res:
+            for ent in res_s['lexicalEntries']:
+                for el in ent['sentences']:
+                    diff_sense_ids.append(el['senseIds'][0])
 
         sense_ids = set(diff_sense_ids)
 
         def search(id):
-            return list(sent['text'] for sent in sentences if sent['senseIds'][0] == id)
+            for res_s in sentences_all_res:
+                for ent in res_s['lexicalEntries']:
+                    return [sent['text'] for sent in ent['sentences'] if sent['senseIds'][0] == id]
 
-        for idx, sens in enumerate(api_call_senses):
-            try:
-                sense_with_examples['word'] = self.word
-                sense_with_examples['sense'] = sens['id']
-                sense_with_examples['definition'] = sens['definitions'][0]
-                examples_for_senses = list(ex['text'] for ex in sens['examples'])
+        for res in senses_all_res:
+            for lent in res['lexicalEntries']:
+                for ent in lent['entries']:
+                    for idx, sens in enumerate(ent['senses']):
+                        try:
+                            sense_with_examples['word'] = self.word
+                            sense_with_examples['sense'] = sens['id']
+                            sense_with_examples['definition'] = sens['definitions'][0]
 
-                if sens['id'] in list(sense_ids):
-                    examples_sense = search(sens['id'])
-                    sense_with_examples['examples'] = list(chain(examples_sense, examples_for_senses))
-            except KeyError:
-                raise ValueError(
-                    'No examples for the word: {}'.format(self.word)
-                )
+                            if 'examples' in sens.keys():
+                                examples_for_senses = list(ex['text'] for ex in sens['examples'])
+                            else:
+                                continue
 
-            self.senses.append(sense_with_examples.copy())
+                            if sens['id'] in list(sense_ids):
+                                examples_sense = search(sens['id'])
+                                sense_with_examples['examples'] = list(chain(examples_sense, examples_for_senses))
+
+                        except KeyError:
+                            raise ValueError(
+                                'No examples for the word: {}'.format(self.word)
+                            )
+
+                        self.senses.append(sense_with_examples.copy())
         return self.senses
-
-print(OxfordDictAPI('love').get_senses())
