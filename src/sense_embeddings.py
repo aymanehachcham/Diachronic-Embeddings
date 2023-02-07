@@ -22,27 +22,6 @@ class VectorEmbeddings():
     def tokens(self):
         return self._tokens
 
-    def _load_lemmatizer(self):
-        import nltk
-        from nltk.stem import WordNetLemmatizer
-        try:
-            nltk.data.find('corpora/wordnet.zip')
-        except LookupError:
-            nltk.download('wordnet')
-
-        self.lematizer = WordNetLemmatizer()
-
-    def _lookup_token_index(self, list_tokens:list, token:str):
-        self._load_lemmatizer()
-        for idx, bert_token in enumerate(list_tokens):
-            if self.lematizer.lemmatize(bert_token, pos='n') == token:
-                return idx
-            if self.lematizer.lemmatize(bert_token, pos='v') == token:
-                return idx
-            if self.lematizer.lemmatize(bert_token, pos='a') == token:
-                return idx
-
-
     def _bert_case_preparation(self):
         self.bert_tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
         self.model = BertModel.from_pretrained(
@@ -59,7 +38,10 @@ class VectorEmbeddings():
             )
         marked_text = "[CLS] " + doc + " [SEP]"
         tokens = self.bert_tokenizer.tokenize(marked_text)
-        main_token_id = self._lookup_token_index(tokens, main_word)
+        try:
+            main_token_id = tokens.index(main_word)
+        except ValueError:
+            print(tokens)
         idx = self.bert_tokenizer.convert_tokens_to_ids(tokens)
         segment_id = [1] * len(tokens)
 
@@ -111,7 +93,7 @@ def create_sense_embeddings():
 
     all_embeddings = []
     for word in all_words:
-        print(f'{"-"*20}Embedding the word {word[0]["word"]}{"-"*20} ')
+        print(f'{"-"*40} Embedding the word {word[0]["word"]} {"-"*40} ')
         output = [sens_embedding(sens).infer_mean_vector() for sens in word]
         all_embeddings.append(output)
 
