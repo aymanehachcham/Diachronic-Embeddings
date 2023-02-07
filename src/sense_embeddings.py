@@ -1,4 +1,5 @@
 
+import re
 import torch
 from transformers import BertTokenizer, BertModel
 from transformers import logging
@@ -33,10 +34,12 @@ class VectorEmbeddings():
 
     def _lookup_token_index(self, list_tokens:list, token:str):
         self._load_lemmatizer()
-        for idx, tkn in enumerate(list_tokens):
-            if (self.lematizer.lemmatize(tkn, pos='n') == token) \
-                    or (self.lematizer.lemmatize(tkn, pos='v') == token) \
-                    or (self.lematizer.lemmatize(tkn, pos='a') == token):
+        for idx, bert_token in enumerate(list_tokens):
+            if self.lematizer.lemmatize(bert_token, pos='n') == token:
+                return idx
+            if self.lematizer.lemmatize(bert_token, pos='v') == token:
+                return idx
+            if self.lematizer.lemmatize(bert_token, pos='a') == token:
                 return idx
 
 
@@ -50,26 +53,24 @@ class VectorEmbeddings():
         self.vocab = True
 
     def infer_vector(self, doc:str, main_word:str):
-        if self.vocab:
-            marked_text = "[CLS] " + doc + " [SEP]"
-            tokens = self.bert_tokenizer.tokenize(marked_text)
-            main_token_id = self._lookup_token_index(tokens, main_word)
-            idx = self.bert_tokenizer.convert_tokens_to_ids(tokens)
-            segment_id = [1] * len(tokens)
-
-            self.tokens_tensor = torch.tensor([idx])
-            self.segments_tensors = torch.tensor([segment_id])
-
-            with torch.no_grad():
-                outputs = self.model(self.tokens_tensor, self.segments_tensors)
-                hidden_states = outputs[2]
-
-            return hidden_states[-2][0][main_token_id]
-
-        else:
+        if not self.vocab:
             raise ValueError(
                 'The Embedding model has not been initialized'
             )
+        marked_text = "[CLS] " + doc + " [SEP]"
+        tokens = self.bert_tokenizer.tokenize(marked_text)
+        main_token_id = self._lookup_token_index(tokens, main_word)
+        idx = self.bert_tokenizer.convert_tokens_to_ids(tokens)
+        segment_id = [1] * len(tokens)
+
+        self.tokens_tensor = torch.tensor([idx])
+        self.segments_tensors = torch.tensor([segment_id])
+
+        with torch.no_grad():
+            outputs = self.model(self.tokens_tensor, self.segments_tensors)
+            hidden_states = outputs[2]
+
+        return hidden_states[-2][0][main_token_id]
 
 
 class ExtractSenseEmbeddings():
@@ -110,6 +111,7 @@ def create_sense_embeddings():
 
     all_embeddings = []
     for word in all_words:
+        print(f'{"-"*20}Embedding the word {word[0]["word"]}{"-"*20} ')
         output = [sens_embedding(sens).infer_mean_vector() for sens in word]
         all_embeddings.append(output)
 
