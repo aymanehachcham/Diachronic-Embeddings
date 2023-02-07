@@ -4,6 +4,8 @@ import json
 from typing import List, Dict
 from itertools import chain
 import os
+import re
+from nltk import WordNetLemmatizer
 
 API_CREDENTIALS = '../API_credentials/oxford_api_credentials.txt'
 def load_credentials(path:str):
@@ -47,6 +49,7 @@ class OxfordDictAPI():
 
         self.url_entries = self.url_ent + self.word + self.strict_match
         self.url_sentences = self.url_sent + self.word + self.strict_match
+        self.lemmatizer = WordNetLemmatizer()
 
         self.sentences = None
         self.senses = []
@@ -58,6 +61,21 @@ class OxfordDictAPI():
     def search(self, id):
         if self.sentences is not None:
             return list(sent['text'] for sent in self.sentences if sent['senseIds'][0] == id)
+
+    def _lemmatize_token(self, tkn):
+        if self.lemmatizer.lemmatize(tkn, pos='n') != tkn:
+            return self.lemmatizer.lemmatize(tkn, pos='n')
+        if self.lemmatizer.lemmatize(tkn, pos='v') != tkn:
+            return self.lemmatizer.lemmatize(tkn, pos='v')
+        return self.lemmatizer.lemmatize(tkn, pos='a')
+
+
+    def _preprocessing(self, sentence:str, main_word:str):
+        words = sentence.split()
+        for idx, w in enumerate(words):
+            if re.search(main_word[:3], w):
+                words[idx] = main_word
+        return ' '.join(words)
 
     def get_senses(self) -> List[Dict]:
         self.res_entries = requests.get(
@@ -72,11 +90,6 @@ class OxfordDictAPI():
 
         self.senses_examples = self._load_into_json(self.res_entries)
         self.sentences_examples = self._load_into_json(self.res_sentences)
-        api_call_senses = self.senses_examples['results'][0]['lexicalEntries'][0]['entries'][0]['senses']
-        sentences = self.sentences_examples['results'][0]['lexicalEntries'][0]['sentences']
-        senses_all_res = self.senses_examples['results']
-        sentences_all_res = self.sentences_examples['results']
-
 
         try:
             self.senses_examples['results']
@@ -91,6 +104,9 @@ class OxfordDictAPI():
                 'No resutls for senteces'
             )
 
+        senses_all_res = self.senses_examples['results']
+        sentences_all_res = self.sentences_examples['results']
+
         sense_with_examples = {}
         diff_sense_ids = []
 
@@ -104,7 +120,7 @@ class OxfordDictAPI():
         def search(id):
             for res_s in sentences_all_res:
                 for ent in res_s['lexicalEntries']:
-                    return [sent['text'] for sent in ent['sentences'] if sent['senseIds'][0] == id]
+                    return [self._preprocessing(sent['text'], self.word) for sent in ent['sentences'] if sent['senseIds'][0] == id]
 
         for res in senses_all_res:
             for lent in res['lexicalEntries']:
@@ -116,7 +132,7 @@ class OxfordDictAPI():
                             sense_with_examples['definition'] = sens['definitions'][0]
 
                             if 'examples' in sens.keys():
-                                examples_for_senses = list(ex['text'] for ex in sens['examples'])
+                                examples_for_senses = list(self._preprocessing(ex['text'], self.word) for ex in sens['examples'])
                             else:
                                 continue
 
@@ -131,3 +147,28 @@ class OxfordDictAPI():
 
                         self.senses.append(sense_with_examples.copy())
         return self.senses
+
+
+if __name__ == '__main__':
+    print(OxfordDictAPI('abuse').get_senses())
+
+
+
+
+    # from nltk import WordNetLemmatizer
+    # lemmatizer = WordNetLemmatizer()
+    # sentence = 'Last year in Parliament, Labor\'s Craig Emerson accused insurance companies of abusing their market power over small smash repairers.'
+    # main_word = 'abuse'
+    # def lemmatize_token(tkn):
+    #     if lemmatizer.lemmatize(tkn, pos='n') != tkn:
+    #         return lemmatizer.lemmatize(tkn, pos='n')
+    #     if lemmatizer.lemmatize(tkn, pos='v') != tkn:
+    #         return lemmatizer.lemmatize(tkn, pos='v')
+    #     return lemmatizer.lemmatize(tkn, pos='a')
+    #
+    # words = sentence.split()
+    # for idx, w in enumerate(words):
+    #     if re.search(main_word[:3], w):
+    #         words[idx] = main_word
+    #
+    # print(' '.join(words))
