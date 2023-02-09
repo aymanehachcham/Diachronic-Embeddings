@@ -3,26 +3,10 @@ from requests.models import Response
 import json
 from typing import List, Dict
 from itertools import chain
-import os
 import re
 from nltk import WordNetLemmatizer
-from ..settings import OxfordAPISettings
+from settings import OxfordAPISettings
 
-API_CREDENTIALS = '../API_credentials/oxford_api_credentials.txt'
-# def load_credentials(path:str):
-#     if os.path.exists(path):
-#         with open(path) as f: creds = f.read()
-#         api_creds = {}
-#         api_creds['Accept'] = creds.split('\n')[0].split(':')[1].strip()
-#         api_creds['app_id'] = creds.split('\n')[1].split(':')[1].strip()
-#         api_creds['app_key'] = creds.split('\n')[2].split(':')[1].strip()
-#         api_creds['url'] = creds.split('\n')[3].split(':', 1)[1].strip()
-#
-#         return api_creds
-#     else:
-#         raise ValueError(
-#             'Path given does not exist: {}'.format(path)
-#         )
 
 class OxfordDictAPI():
     def __init__(
@@ -127,30 +111,9 @@ class OxfordDictAPI():
                                 'No examples for the word: {}'.format(self.word)
                             )
 
-                        self.senses.append(sense_with_examples.copy())
+                        self.senses += [sense_with_examples.copy()]
         return self.senses
 
 
 if __name__ == '__main__':
-    # print(OxfordDictAPI('abuse').get_senses())
-
-
-
-
-    # from nltk import WordNetLemmatizer
-    # lemmatizer = WordNetLemmatizer()
-    sentence = 'the Welsh Marches'
-    main_word = 'march'
-    # def lemmatize_token(tkn):
-    #     if lemmatizer.lemmatize(tkn, pos='n') != tkn:
-    #         return lemmatizer.lemmatize(tkn, pos='n')
-    #     if lemmatizer.lemmatize(tkn, pos='v') != tkn:
-    #         return lemmatizer.lemmatize(tkn, pos='v')
-    #     return lemmatizer.lemmatize(tkn, pos='a')
-    #
-    words = sentence.split()
-    for idx, w in enumerate(words):
-        if re.search(main_word[:3], w.lower()):
-            words[idx] = main_word
-
-    print(' '.join(words))
+    print(OxfordDictAPI('abuse').get_senses())

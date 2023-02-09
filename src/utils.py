@@ -1,8 +1,8 @@
 
 import json
 import os
-from api_call import OxfordDictAPI
-import logging
+from src.api_call import OxfordDictAPI
+
 
 def create_sens_embeddings(path:str):
     if os.path.exists(path):
@@ -45,5 +45,5 @@ def poly_words(list_words, num_senses: int):
 
 
 if __name__ == '__main__':
-    with open('../../data/target_words/senses_oxford_api.json', 'w') as f:
-        json.dump(perform_on_all_words('../../data/target_words/polysemous.txt'), f, indent=4)
+    with open('../data/target_words/senses_oxford_api.json', 'w') as f:
+        json.dump(perform_on_all_words('../data/target_words/polysemous.txt'), f, indent=4)
