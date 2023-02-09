@@ -3,14 +3,3 @@ administration
 cold
 aid
 authority
-battle
-black
-campaign
-live
-head
-march
-release
-screen
-war
-union
-white

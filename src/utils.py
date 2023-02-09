@@ -23,17 +23,13 @@ def create_sens_embeddings(path:str):
 def perform_on_all_words(path:str):
     if not os.path.exists(path):
         raise ValueError(
-            'Path given does not exist: {}'.format(path)
+            f'No matches for the given path: {path}'
         )
     with open(path) as f: full_text = f.read()
     all_words = []
     for word in full_text.split('\n'):
-        print(f'Extracting examples for the word {word}. {"-"*10}')
-        try:
-            out_dict = OxfordDictAPI(word_id=word).get_senses()
-            all_words.append(out_dict)
-        except ValueError:
-            continue
+        out_dict = OxfordDictAPI(word_id=word).get_senses()
+        all_words.append(out_dict)
     return all_words
 
 

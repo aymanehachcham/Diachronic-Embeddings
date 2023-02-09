@@ -1,5 +1,5 @@
 
-import re
+
 import torch
 from transformers import BertTokenizer, BertModel
 from transformers import logging
@@ -40,19 +40,22 @@ class VectorEmbeddings():
         tokens = self.bert_tokenizer.tokenize(marked_text)
         try:
             main_token_id = tokens.index(main_word)
-        except ValueError:
-            print(tokens)
-        idx = self.bert_tokenizer.convert_tokens_to_ids(tokens)
-        segment_id = [1] * len(tokens)
+            idx = self.bert_tokenizer.convert_tokens_to_ids(tokens)
+            segment_id = [1] * len(tokens)
 
-        self.tokens_tensor = torch.tensor([idx])
-        self.segments_tensors = torch.tensor([segment_id])
+            self.tokens_tensor = torch.tensor([idx])
+            self.segments_tensors = torch.tensor([segment_id])
 
-        with torch.no_grad():
-            outputs = self.model(self.tokens_tensor, self.segments_tensors)
-            hidden_states = outputs[2]
+            with torch.no_grad():
+                outputs = self.model(self.tokens_tensor, self.segments_tensors)
+                hidden_states = outputs[2]
 
-        return hidden_states[-2][0][main_token_id]
+            return hidden_states[-2][0][main_token_id]
+
+        except IndexError:
+            raise ValueError(
+                f'The word: "{main_word}" does not exist in the list of tokens: {tokens}'
+            )
 
 
 class ExtractSenseEmbeddings():

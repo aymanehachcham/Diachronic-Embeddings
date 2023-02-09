@@ -7,6 +7,7 @@ import re
 from nltk import WordNetLemmatizer
 from settings import OxfordAPISettings
 import logging
+from components import OxfordAPIResponse
 
 
 class OxfordDictAPI():
@@ -31,8 +32,19 @@ class OxfordDictAPI():
         self.url_sentences = self.url_sent + self.word + self.strict_match
         self.lemmatizer = WordNetLemmatizer()
 
+        self.res_entries = requests.get(
+            self.url_entries,
+            headers={'app_id': self.api_creds.app_id, 'app_key': self.api_creds.app_key}
+        )
+
+        self.res_sentences = requests.get(
+            self.url_sentences,
+            headers={'app_id': self.api_creds.app_id, 'app_key': self.api_creds.app_key}
+        )
+
         self.sentences = None
         self.senses = []
+        self.oxford_word = {}
 
     def _load_into_json(self, res: Response):
         json_output = json.dumps(res.json())
@@ -53,17 +65,9 @@ class OxfordDictAPI():
                 words[idx] = main_word
         return ' '.join(words)
 
-    def get_senses(self) -> List[Dict]:
-        logging.info(f'{"-"*20} Loading the API for the desired word: "{self.word}" {"-"*20}')
-        self.res_entries = requests.get(
-            self.url_entries,
-            headers={'app_id': self.api_creds.app_id, 'app_key': self.api_creds.app_key}
-        )
-
-        self.res_sentences = requests.get(
-            self.url_sentences,
-            headers={'app_id': self.api_creds.app_id, 'app_key': self.api_creds.app_key}
-        )
+    def _yield_component(self) -> Dict:
+        logging.info(
+            f'{"-" * 20} Extracting sentence examples from the Oxford API for the desired word: "{self.word}" {"-" * 20}')
 
         self.senses_examples = self._load_into_json(self.res_entries)
         self.sentences_examples = self._load_into_json(self.res_sentences)
@@ -89,19 +93,20 @@ class OxfordDictAPI():
         def search(id):
             for res_s in sentences_all_res:
                 for ent in res_s['lexicalEntries']:
-                    return [self._preprocessing(sent['text'], self.word) for sent in ent['sentences'] if sent['senseIds'][0] == id]
+                    return [self._preprocessing(sent['text'], self.word) for sent in ent['sentences'] if
+                            sent['senseIds'][0] == id]
 
         for res in senses_all_res:
             for lent in res['lexicalEntries']:
                 for ent in lent['entries']:
                     for idx, sens in enumerate(ent['senses']):
                         try:
-                            sense_with_examples['word'] = self.word
-                            sense_with_examples['sense'] = sens['id']
+                            sense_with_examples['id'] = sens['id']
                             sense_with_examples['definition'] = sens['definitions'][0]
 
                             if 'examples' in sens.keys():
-                                examples_for_senses = list(self._preprocessing(ex['text'], self.word) for ex in sens['examples'])
+                                examples_for_senses = list(
+                                    self._preprocessing(ex['text'], self.word) for ex in sens['examples'])
                             else:
                                 continue
 
@@ -114,8 +119,16 @@ class OxfordDictAPI():
                                 'No examples for the word: {}'.format(self.word)
                             )
 
-                        self.senses += [sense_with_examples.copy()]
-        return self.senses
+                        try:
+                            yield OxfordAPIResponse(**sense_with_examples).dict().copy()
+                        except ValueError:
+                            continue
+
+    def get_senses(self) -> Dict:
+        self.oxford_word['word'] = self.word
+        self.oxford_word['senses'] = list(self._yield_component())
+
+        return self.oxford_word
 
 
 if __name__ == '__main__':
