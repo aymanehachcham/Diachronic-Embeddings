@@ -12,38 +12,8 @@ def get_targets():
     return targets
 
 def get_sentences(year, targets):
-    import pandas as pd
-    df = pd.read_csv('../articles_raw_data/news_' + str(year) + '.csv')
-    df = df['text']
-
-    bag = [item for sentence in df for item in sentence.split('.') if item != '']
-    bag_size = len(bag)
-
-    sentences = []
-
-
-    for i in targets:
-        count = 0
-
-        for j in range(bag_size):
-            if count < 1000:
-                sentence = bag[j].split()
-
-                if len(sentence) > 512:
-                    sentence = sentence[:512]
-                
-                if len(sentence) < 10:
-                    continue
-
-                if i in sentence:
-                    sentences.append(bag[j])
-                    count += 1
-                else:
-                    continue
-            else:
-                break
-
-    sentences = list(set(sentences))
+    with open() as f:
+        sentences= []
     return sentences
 
 
