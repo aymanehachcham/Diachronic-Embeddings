@@ -1,39 +1,18 @@
 
 import os.path
-from pydantic import BaseModel, validator
-from typing import Union, List
-from pydantic.dataclasses import dataclass
+from typing import List
+from components import Word, WordFitted
+from dataclasses import dataclass
 
-class Word(BaseModel):
-    word:str
-    props:List[float]
-
-class WordFitted(BaseModel):
-    word:str
-    sense:str
-    years:List[int]
-    props:List[float]
-    poly_fit:List[float]
-
-class PolynomialFitting():
+@dataclass(frozen=True)
+class PolynomialFitting:
     root_dir:str
-    words_80:List[Word]
-    words_85: List[Word]
-    @validator('root_dir')
-    def check_path(cls, value):
-        if not os.path.exists(value):
-            raise ValueError(
-                f'The Path given: {value} is not valid'
-            )
-        return value
+    word:str
 
-    # Load files should be a Config file, research on that:
     def _load_files(self):
-        with open('../data/target_words/senses_proportions_1980.json') as f:
-            self.words_80 = json.load(f)
-
-        with open('../data/target_words/senses_proportions_1985.json') as f:
-            self.words_85 = json.load(f)
+        for year in range(1980, 2020, 5):
+            with open(f'../embeddings_similarity/embeddings_sim_{year}.json', 'r') as f:
+                words = json.load(f)
 
 
 if __name__ == '__main__':
