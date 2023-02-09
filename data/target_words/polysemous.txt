@@ -1,7 +1,6 @@
 abuse
 administration
 cold
-wall
 aid
 authority
 battle
@@ -10,10 +9,8 @@ campaign
 live
 head
 march
-public
 release
 screen
-shot
 war
 union
 white
