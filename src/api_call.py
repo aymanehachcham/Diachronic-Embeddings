@@ -6,6 +6,7 @@ from itertools import chain
 import re
 from nltk import WordNetLemmatizer
 from settings import OxfordAPISettings
+import logging
 
 
 class OxfordDictAPI():
@@ -18,6 +19,7 @@ class OxfordDictAPI():
                 f'Expected word_id to be a string, but got {type(word_id)}'
             )
 
+        self.loggig = logging.basicConfig(level='INFO')
         self.api_creds = OxfordAPISettings()
         self.word = word_id
         self.query = ('entries', 'sentences')
@@ -52,6 +54,7 @@ class OxfordDictAPI():
         return ' '.join(words)
 
     def get_senses(self) -> List[Dict]:
+        logging.info(f'{"-"*20} Loading the API for the desired word: "{self.word}" {"-"*20}')
         self.res_entries = requests.get(
             self.url_entries,
             headers={'app_id': self.api_creds.app_id, 'app_key': self.api_creds.app_key}
