@@ -1,7 +1,7 @@
 
 
 if __name__ == '__main__':
-    from api_calls.utils import perform_on_all_words
+    from src.utils import perform_on_all_words
     import json
 
     POLYSEMOUS = '../data/target_words/polysemous.txt'

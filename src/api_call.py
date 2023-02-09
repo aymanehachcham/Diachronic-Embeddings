@@ -3,49 +3,29 @@ from requests.models import Response
 import json
 from typing import List, Dict
 from itertools import chain
-import os
 import re
 from nltk import WordNetLemmatizer
+from settings import OxfordAPISettings
+import logging
 
-API_CREDENTIALS = '../API_credentials/oxford_api_credentials.txt'
-def load_credentials(path:str):
-    if os.path.exists(path):
-        with open(path) as f: creds = f.read()
-        api_creds = {}
-        api_creds['Accept'] = creds.split('\n')[0].split(':')[1].strip()
-        api_creds['app_id'] = creds.split('\n')[1].split(':')[1].strip()
-        api_creds['app_key'] = creds.split('\n')[2].split(':')[1].strip()
-        api_creds['url'] = creds.split('\n')[3].split(':', 1)[1].strip()
-
-        return api_creds
-    else:
-        raise ValueError(
-            'Path given does not exist: {}'.format(path)
-        )
 
 class OxfordDictAPI():
     def __init__(
             self,
             word_id: str
     ):
-        self.api_creds = load_credentials(API_CREDENTIALS)
-        self.headers = {
-            "Accept": self.api_creds['Accept'],
-            "app_id": self.api_creds['app_id'],
-            "app_key": self.api_creds['app_key']
-        }
-
-        if isinstance(word_id, str):
-            self.word = word_id
-        else:
+        if not isinstance(word_id, str):
             raise ValueError(
-                'The word id should be a string'
+                f'Expected word_id to be a string, but got {type(word_id)}'
             )
 
+        self.loggig = logging.basicConfig(level='INFO')
+        self.api_creds = OxfordAPISettings()
+        self.word = word_id
         self.query = ('entries', 'sentences')
-        self.url_ent = '{}/{}/en/'.format(self.api_creds['url'], self.query[0])
-        self.url_sent = '{}/{}/en/'.format(self.api_creds['url'], self.query[1])
-        self.strict_match = '?strictMatch=true'
+        self.url_ent = f'{self.api_creds.url}/{self.query[0]}/en/'
+        self.url_sent = f'{self.api_creds.url}/{self.query[1]}/en/'
+        self.strict_match = f'?strictMatch={self.api_creds.strict_match}'
 
         self.url_entries = self.url_ent + self.word + self.strict_match
         self.url_sentences = self.url_sent + self.word + self.strict_match
@@ -57,10 +37,6 @@ class OxfordDictAPI():
     def _load_into_json(self, res: Response):
         json_output = json.dumps(res.json())
         return json.loads(json_output)
-
-    def search(self, id):
-        if self.sentences is not None:
-            return list(sent['text'] for sent in self.sentences if sent['senseIds'][0] == id)
 
     def _lemmatize_token(self, tkn):
         if self.lemmatizer.lemmatize(tkn, pos='n') != tkn:
@@ -78,30 +54,23 @@ class OxfordDictAPI():
         return ' '.join(words)
 
     def get_senses(self) -> List[Dict]:
+        logging.info(f'{"-"*20} Loading the API for the desired word: "{self.word}" {"-"*20}')
         self.res_entries = requests.get(
             self.url_entries,
-            headers={'app_id': self.headers['app_id'], 'app_key': self.headers['app_key']}
+            headers={'app_id': self.api_creds.app_id, 'app_key': self.api_creds.app_key}
         )
 
         self.res_sentences = requests.get(
             self.url_sentences,
-            headers={'app_id': self.headers['app_id'], 'app_key': self.headers['app_key']}
+            headers={'app_id': self.api_creds.app_id, 'app_key': self.api_creds.app_key}
         )
 
         self.senses_examples = self._load_into_json(self.res_entries)
         self.sentences_examples = self._load_into_json(self.res_sentences)
 
-        try:
-            self.senses_examples['results']
-        except KeyError:
+        if ('results' not in self.senses_examples.keys()) or ('results' not in self.sentences_examples.keys()):
             raise ValueError(
-                'No resutls for senses'
-            )
-        try:
-            self.sentences_examples['results']
-        except KeyError:
-            raise ValueError(
-                'No resutls for senteces'
+                f'No results from the Oxford API for the word: "{self.word}"'
             )
 
         senses_all_res = self.senses_examples['results']
@@ -145,30 +114,9 @@ class OxfordDictAPI():
                                 'No examples for the word: {}'.format(self.word)
                             )
 
-                        self.senses.append(sense_with_examples.copy())
+                        self.senses += [sense_with_examples.copy()]
         return self.senses
 
 
 if __name__ == '__main__':
-    # print(OxfordDictAPI('abuse').get_senses())
-
-
-
-
-    # from nltk import WordNetLemmatizer
-    # lemmatizer = WordNetLemmatizer()
-    sentence = 'the Welsh Marches'
-    main_word = 'march'
-    # def lemmatize_token(tkn):
-    #     if lemmatizer.lemmatize(tkn, pos='n') != tkn:
-    #         return lemmatizer.lemmatize(tkn, pos='n')
-    #     if lemmatizer.lemmatize(tkn, pos='v') != tkn:
-    #         return lemmatizer.lemmatize(tkn, pos='v')
-    #     return lemmatizer.lemmatize(tkn, pos='a')
-    #
-    words = sentence.split()
-    for idx, w in enumerate(words):
-        if re.search(main_word[:3], w.lower()):
-            words[idx] = main_word
-
-    print(' '.join(words))
+    print(OxfordDictAPI('abuse').get_senses())
