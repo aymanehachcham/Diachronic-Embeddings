@@ -6,14 +6,17 @@ model = BertModel.from_pretrained('bert-base-uncased', output_hidden_states = Tr
 model.eval()
 
 def get_targets():
-    words_file = open('../data/target_words/polysemous2.txt', 'r')
+    words_file = open('../data/target_words/polysemous3.txt', 'r')
     targets = words_file.read().split('\n')
 
     return targets
 
-def get_sentences(year, targets):
-    with open() as f:
-        sentences= []
+def get_sentences(year):
+    sentences = []
+    with open('../articles_raw_data/' + str(year) + '_sentences.txt', 'r') as f:
+        for line in f:
+            sentences.append(line.strip())
+    
     return sentences
 
 
@@ -39,43 +42,47 @@ def infer_vector(doc:str):
 
 def get_embed(sentences, targets):
 
-
     results = {k: {'word': k, 'sentence_number_index': [] , 'embeddings': []} for k in targets}
 
-    for i in range(len(sentences)): #len(sentences)
-        if i%1000 == 0:
-            print(i)
+    for word in targets:
+        print('the word: ', word)
+        count = 0
 
-        embeddings, tokens = infer_vector(sentences[i])
+        for i in range(len(sentences)):
+            sentence = sentences[i]
 
-        for word in targets:
-            if len(results[word]['sentence_number_index']) < 1000:
+            if count > 1000:
+                print('reached 1000 for word: ', word)
+                break
+
+            elif word in sentence.split():
+                embeddings, tokens = infer_vector(sentence)
+                
                 if word in tokens:
                     index = tokens.index(word)
                     embedding = embeddings[index].tolist()
 
                     results[word]['sentence_number_index'].append([i, index])
                     results[word]['embeddings'].append(embedding)
-                    
+
+                    count += 1
+                
                 else:
                     continue
+
             else:
                 continue
-
+    
     return results
+
 
 def get_all(year):
     print('getting targets ..............................')
     targets = get_targets()
     print('getting sentences ............................')
-    sentences = get_sentences(year= year, targets= targets)
+    sentences = get_sentences(year= year)
     print('number of sentences: ', len(sentences))
 
-    print('saving sentences..............................')
-    file = open('../articles_raw_data/' + str(year) + '_sentences.txt','w') 
-    for item in sentences:
-        file.write(item+"\n")
-    file.close()
     
     print('getting embeddings for sentences ..............')
     results = get_embed(
