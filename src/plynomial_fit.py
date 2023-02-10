@@ -30,7 +30,7 @@ if __name__ == '__main__':
         with open(f'../embeddings_similarity/embeddings_sim_{year}.json', 'r') as f:
             sims = json.load(f)
 
-        abuse = Word(**sims[7])
+        abuse = Word(**sims[0])
         proportion_sense_0 = abuse.props[0]
         proportion_sense_1 = abuse.props[1]
         proportion_sense_2 = abuse.props[2]

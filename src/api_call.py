@@ -101,18 +101,19 @@ class OxfordDictAPI():
                 for ent in lent['entries']:
                     for idx, sens in enumerate(ent['senses']):
                         try:
+                            if not 'examples' in sens.keys():
+                                continue
+
                             sense_with_examples['id'] = sens['id']
                             sense_with_examples['definition'] = sens['definitions'][0]
-
-                            if 'examples' in sens.keys():
-                                examples_for_senses = list(
-                                    self._preprocessing(ex['text'], self.word) for ex in sens['examples'])
-                            else:
-                                continue
+                            examples_for_senses = list(self._preprocessing(ex['text'], self.word) for ex in sens['examples'])
+                            # print('First: ', examples_for_senses)
 
                             if sens['id'] in list(sense_ids):
                                 examples_sense = search(sens['id'])
                                 sense_with_examples['examples'] = list(chain(examples_sense, examples_for_senses))
+                            else:
+                                sense_with_examples['examples'] = examples_for_senses
 
                         except KeyError:
                             raise ValueError(
@@ -132,4 +133,4 @@ class OxfordDictAPI():
 
 
 if __name__ == '__main__':
-    print(OxfordDictAPI('abuse').get_senses())
+    print(OxfordDictAPI('gender').get_senses())

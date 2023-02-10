@@ -19,6 +19,13 @@ class OxfordAPISettings(BaseSettings):
         env_file = "../.env"
         env_file_encoding = "utf-8"
 
+
+class EmbeddingFiles(BaseSettings):
+    poly_words_f:str = '../data/target_words/polysemous.txt'
+    oxford_word_senses: str = '../data/target_words/senses_oxford_api.json'
+    sense_embeddings: str = '../embeddings/embeddings_for_senses.json'
+
+
 if __name__ == '__main__':
     print(OxfordAPISettings())
 

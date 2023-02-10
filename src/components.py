@@ -3,6 +3,49 @@ from pydantic import BaseModel, validator, Field
 from typing import List, Optional
 import numpy as np
 
+class OxfordAPIResponse(BaseModel):
+    id:str = None
+    definition:str = None
+    examples:Optional[List[str]] = None
+
+    class Config:
+        allow_population_by_field_name = True
+
+    def __call__(self, **kwargs):
+        self.id = kwargs['id']
+        self.definition = kwargs['definition']
+        self.examples = kwargs['examples']
+
+    @validator('examples')
+    def min_len_examples(cls, v):
+        if not len(v) > 5:
+            raise ValueError(
+                f'Not Enough examples to compile, given: {len(v)}, expected at least 10'
+            )
+        return v
+
+class SenseEmbedding(BaseModel):
+    sense:str = None
+    definition:str = None
+    embedding:List[float] = None
+
+    class Config:
+        allow_population_by_field_name = True
+
+    def __call__(self, **kwargs):
+        self.id = kwargs['id']
+        self.definition = kwargs['definition']
+        self.examples = kwargs['embedding']
+
+    @property
+    def get_embeddings(self):
+        if self.embedding is None:
+            raise ValueError(
+                f'The Embeddings provided are null: {self.embedding}'
+            )
+        return np.array(self.embedding)
+
+
 class Word(BaseModel):
     word:str
     props:List[float]
@@ -14,36 +57,8 @@ class WordFitted(BaseModel):
     props:List[float]
     poly_fit:List[float]
 
-class OxfordAPIResponse(BaseModel):
-    id:str
-    definition:str
-    examples:Optional[List[str]] = Field(None, alias="examples")
-
-    @validator('examples')
-    def min_len_examples(cls, v):
-        if not len(v) > 10:
-            raise ValueError(
-                f'Not Enough examples to compile, given: {len(v)}, expected at least 10'
-            )
-        return v
-
-    class Config:
-        allow_population_by_field_name = True
 
 
-class SenseEmbedding(BaseModel):
-    word:str
-    sense:str
-    definition:str
-    embedding:List[float]
-
-    @property
-    def get_embeddings(self):
-        if self.embedding is None:
-            raise ValueError(
-                f'The Embeddings provided are null: {self.embedding}'
-            )
-        return np.array(self.embedding)
 
 class Embedding(BaseModel):
     sentence_number_index: List[List]
