@@ -22,6 +22,7 @@ def create_sens_embeddings(path:str):
 
 def perform_on_all_words(path:str):
     all_words = []
+    processed_words = []
     if not os.path.exists(path):
         raise ValueError(
             f'No matches for the given path: {path}'
@@ -30,10 +31,11 @@ def perform_on_all_words(path:str):
     for word in full_text.split('\n'):
         try:
             all_words += [OxfordDictAPI(word_id=word).get_senses()]
+            processed_words += [word]
         except ValueError:
             continue
 
-    return all_words
+    return all_words, processed_words
 
 def poly_words(list_words, num_senses: int):
     for word in list_words:
@@ -43,6 +45,8 @@ def poly_words(list_words, num_senses: int):
 
 if __name__ == '__main__':
     files = EmbeddingFiles()
-    with open(files.oxford_word_senses, 'r') as f:
-        json.dump(perform_on_all_words(files.poly_words_f), f, indent=4)
+    with open(files.oxford_word_senses, 'w') as f:
+        w, p = perform_on_all_words(files.poly_words_f)
+        json.dump(w, f, indent=4)
+        print(p)
 

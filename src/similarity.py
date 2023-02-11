@@ -47,14 +47,9 @@ class LoadingEmbeddings():
         ):
 
         logging.basicConfig(level=logging.NOTSET)
-        example_embeds = []
         with open(os.path.join(root_dir, example_embeddings_file), 'r') as f:
             logging.info('{} Loading File {} {}'.format('-' * 10, f.name, '-' * 10))
-            for line in f:
-                example_embeds.append(json.loads(line))
-        # with open(os.path.join(root_dir, example_embeddings_file), 'r') as f:
-        #     logging.info('{} Loading File {} {}'.format('-' * 10, f.name, '-' * 10))
-        #     example_embeds = json.load(f)
+            example_embeds = json.load(f)
 
         with open(os.path.join(root_dir, sense_embeddings_file), 'r') as f:
             logging.info('{} Loading File {} {}'.format('-' * 10, f.name, '-' * 10))
@@ -89,7 +84,7 @@ class Similarities():
 
     def _search_word_sense(self, main_word:str):
         for w in self.embeddings_senses:
-            if w[0]['word'] == main_word:
+            if w['word'] == main_word:
                 yield w
 
     def _cos_sim(self, vect_a:np.array, vect_b:np.array):
@@ -103,7 +98,7 @@ class Similarities():
             senses = next(self._search_word_sense(main_word))
         except StopIteration:
             raise ValueError(
-                'Word not in list'
+                f'Word {main_word} not present in the list of words'
             )
 
         all_sims = []
@@ -125,7 +120,7 @@ def sim_on_all_words():
     with open('../data/target_words/polysemous.txt', 'r') as f:
         words = f.read()
 
-    for year in range(1980, 2020, 5):
+    for year in [1980, 1982, 1985, 1987, 1989, 1990, 1995, 2000, 2001, 2002, 2003, 2005, 2008, 2009, 2010, 2012, 2013, 2015, 2016, 2017, 2018]:
         print(f'------------ {year} ---------------')
         sim = Similarities(
             senses_file=SENSES_FILE,
@@ -140,6 +135,7 @@ def sim_on_all_words():
                     continue
 
             json.dump(similarities, f, indent=4)
+        break
 
 
 if __name__ == '__main__':

@@ -107,7 +107,6 @@ class OxfordDictAPI():
                             sense_with_examples['id'] = sens['id']
                             sense_with_examples['definition'] = sens['definitions'][0]
                             examples_for_senses = list(self._preprocessing(ex['text'], self.word) for ex in sens['examples'])
-                            # print('First: ', examples_for_senses)
 
                             if sens['id'] in list(sense_ids):
                                 examples_sense = search(sens['id'])
@@ -128,7 +127,10 @@ class OxfordDictAPI():
     def get_senses(self) -> Dict:
         self.oxford_word['word'] = self.word
         self.oxford_word['senses'] = list(self._yield_component())
-
+        if self.oxford_word['senses'] == []:
+            raise ValueError(
+                f'No available senses for the word {self.word}'
+            )
         return self.oxford_word
 
 

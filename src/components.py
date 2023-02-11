@@ -18,9 +18,9 @@ class OxfordAPIResponse(BaseModel):
 
     @validator('examples')
     def min_len_examples(cls, v):
-        if not len(v) > 5:
+        if not len(v) >= 5:
             raise ValueError(
-                f'Not Enough examples to compile, given: {len(v)}, expected at least 10'
+                f'Not Enough examples to compile, given: {len(v)}, expected at least 5'
             )
         return v
 
@@ -61,9 +61,9 @@ class WordFitted(BaseModel):
 
 
 class Embedding(BaseModel):
+    word: str
     sentence_number_index: List[List]
     embeddings: List[List]
-    word:str
 
     @property
     def get_embeddings(self):
