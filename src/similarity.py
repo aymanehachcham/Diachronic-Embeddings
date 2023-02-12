@@ -16,25 +16,11 @@ class SenseEmbedding(BaseModel):
     definition:str
     embedding:List[float]
 
-    # @property
-    # def embedding(self):
-    #     if self.embedding is None:
-    #         raise ValueError(
-    #             f'The Embeddings provided are null: {self.embedding}'
-    #         )
-    #     return np.array(self._embedding)
 
 class Embedding(BaseModel):
     word: str
     sentence_number_index: List[List]
     embeddings: List[List]
-    # @property
-    # def embeddings(self):
-    #     if self.embeddings is None:
-    #         raise ValueError(
-    #             f'The Embeddings provided are null: {self.embeddings}'
-    #         )
-    #     return np.array(self._embeddings)
 
 class LoadingEmbeddings():
 
