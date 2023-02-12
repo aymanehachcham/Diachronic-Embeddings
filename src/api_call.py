@@ -47,6 +47,11 @@ class OxfordDictAPI():
         self.oxford_word = {}
 
     def _load_into_json(self, res: Response):
+        res.raise_for_status()
+        if not res.status_code == 200:
+            raise ValueError(
+                f'The API is not responsive, error status code {res.status_code}'
+            )
         json_output = json.dumps(res.json())
         return json.loads(json_output)
 
@@ -101,18 +106,18 @@ class OxfordDictAPI():
                 for ent in lent['entries']:
                     for idx, sens in enumerate(ent['senses']):
                         try:
+                            if not 'examples' in sens.keys():
+                                continue
+
                             sense_with_examples['id'] = sens['id']
                             sense_with_examples['definition'] = sens['definitions'][0]
-
-                            if 'examples' in sens.keys():
-                                examples_for_senses = list(
-                                    self._preprocessing(ex['text'], self.word) for ex in sens['examples'])
-                            else:
-                                continue
+                            examples_for_senses = list(self._preprocessing(ex['text'], self.word) for ex in sens['examples'])
 
                             if sens['id'] in list(sense_ids):
                                 examples_sense = search(sens['id'])
                                 sense_with_examples['examples'] = list(chain(examples_sense, examples_for_senses))
+                            else:
+                                sense_with_examples['examples'] = examples_for_senses
 
                         except KeyError:
                             raise ValueError(
@@ -127,7 +132,10 @@ class OxfordDictAPI():
     def get_senses(self) -> Dict:
         self.oxford_word['word'] = self.word
         self.oxford_word['senses'] = list(self._yield_component())
-
+        if self.oxford_word['senses'] == []:
+            raise ValueError(
+                f'No available senses for the word {self.word}'
+            )
         return self.oxford_word
 
 
