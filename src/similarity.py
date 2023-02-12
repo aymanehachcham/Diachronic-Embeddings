@@ -5,36 +5,36 @@ import json
 from numpy.linalg import norm
 from pydantic import BaseModel, validator
 from typing import List
+import logging
 
 import numpy as np
 
 SENSES_FILE = 'embeddings_for_senses.json'
 
 class SenseEmbedding(BaseModel):
-    word:str
-    sense:str
+    id:str
     definition:str
     embedding:List[float]
 
-    @property
-    def get_embeddings(self):
-        if self.embedding is None:
-            raise ValueError(
-                f'The Embeddings provided are null: {self.embedding}'
-            )
-        return np.array(self.embedding)
+    # @property
+    # def embedding(self):
+    #     if self.embedding is None:
+    #         raise ValueError(
+    #             f'The Embeddings provided are null: {self.embedding}'
+    #         )
+    #     return np.array(self._embedding)
 
 class Embedding(BaseModel):
+    word: str
     sentence_number_index: List[List]
     embeddings: List[List]
-    word:str
-    @property
-    def get_embeddings(self):
-        if self.embeddings is None:
-            raise ValueError(
-                f'The Embeddings provided are null: {self.embeddings}'
-            )
-        return np.array(self.embeddings)
+    # @property
+    # def embeddings(self):
+    #     if self.embeddings is None:
+    #         raise ValueError(
+    #             f'The Embeddings provided are null: {self.embeddings}'
+    #         )
+    #     return np.array(self._embeddings)
 
 class LoadingEmbeddings():
 
@@ -74,28 +74,30 @@ class Similarities():
         with open('../data/target_words/polysemous.txt', 'r') as f:
             words = f.read()
 
-        self.all_embeddings = []
-        for embed, w in zip(self.embeddings_examples, words.split('\n')):
-            v = Embedding(**embed)
-            if v.word != w:
-                v.word = w
+        self.all_embeddings = list(self._lookup_examples_that_match(words))
 
-            self.all_embeddings.append(v.copy())
+    def _lookup_examples_that_match(self, words):
+        embeddings = []
+        for embed in self.embeddings_examples:
+            embeddings += [embed['word']]
+        for word in list(set(embeddings) & set(words.split('\n'))):
+            yield next(Embedding(**e) for e in self.embeddings_examples if word == e['word'])
 
     def _search_word_sense(self, main_word:str):
         for w in self.embeddings_senses:
-            if w['word'] == main_word:
-                yield w
+            if not w['word'] == main_word:
+                continue
+            return [SenseEmbedding(**s) for s in w['senses']]
+
 
     def _cos_sim(self, vect_a:np.array, vect_b:np.array):
         return (vect_a @ vect_b)/(norm(vect_a) * norm(vect_b))
 
-    def __call__(self, main_word:str):
+    def __call__(self, main_word:str, year:int):
         from collections import Counter
-        # examples = [np.array(ex['embeddings']) for ex in self.embeddings_examples]
-        # examples = np.array(self.embeddings_examples[word]['embeddings'])
+        print(f'{"-" * 10} Similarities for the word {main_word} {"-" * 10}')
         try:
-            senses = next(self._search_word_sense(main_word))
+            w_senses = self._search_word_sense(main_word)
         except StopIteration:
             raise ValueError(
                 f'Word {main_word} not present in the list of words'
@@ -103,14 +105,12 @@ class Similarities():
 
         all_sims = []
         for embed in self.all_embeddings:
-            if embed.word == main_word:
-                print(f'{"-"*10} Similarities for the word {embed.word} {"-"*10}')
-                for embedding_ex in embed.embeddings:
-                    s_argmax =  np.argmax(list(self._cos_sim(np.array(sens['embedding']), np.array(embedding_ex)) for sens in senses))
-                    all_sims.append(senses[s_argmax]['sense'])
+            for ex in embed.embeddings:
+                s_argmax = np.argmax([self._cos_sim(np.array(ex), np.array(s.embedding)) for s in w_senses])
+                all_sims += [w_senses[s_argmax].id]
         #
             self.word_sense_proportions['word'] = main_word
-        # self.word_sense_proportions['sense_distribution'] = all_sims
+            self.word_sense_proportions['year'] = year
             self.word_sense_proportions['props'] = list(map(lambda x: x[1]/len(all_sims), Counter(all_sims).most_common()))
         #
         return self.word_sense_proportions.copy()
@@ -120,59 +120,35 @@ def sim_on_all_words():
     with open('../data/target_words/polysemous.txt', 'r') as f:
         words = f.read()
 
-    for year in [1980, 1982, 1985, 1987, 1989, 1990, 1995, 2000, 2001, 2002, 2003, 2005, 2008, 2009, 2010, 2012, 2013, 2015, 2016, 2017, 2018]:
-        print(f'------------ {year} ---------------')
-        sim = Similarities(
-            senses_file=SENSES_FILE,
-            examples_file=f'embeddings_{year}.json'
-        )
-        similarities = []
-        with open(f'../embeddings_similarity/embeddings_sim_{year}.json', 'w') as f:
-            for w in words.split('\n'):
-                try:
-                    similarities.append(sim(w))
-                except ValueError:
-                    continue
+    similarities = []
+    for w in words.split('\n'):
+        for year in [1980, 1982, 1985, 1987, 1989, 1990, 1995, 2000, 2001, 2002, 2003, 2005, 2008, 2009, 2010, 2012,
+                     2013, 2015, 2016, 2017, 2018]:
+            print(f'------------ {year} ---------------')
+            sim = Similarities(
+                senses_file=SENSES_FILE,
+                examples_file=f'embeddings_{year}.json'
+            )
 
+            similarities += [sim(w, year)]
+
+        with open(f'../embeddings_similarity/embeddings_sim_{w}.json', 'w') as f:
             json.dump(similarities, f, indent=4)
         break
 
 
 if __name__ == '__main__':
-    sim_on_all_words()
 
-    # with open('../data/target_words/polysemous.txt', 'r') as f:
-    #     words = f.read()
-    #
-    # sim = Similarities(
-    #     senses_file=SENSES_FILE,
-    #     examples_file=f'embeddings_{1980}.json'
-    # )
-    #
-    # sims = []
-    # for w in words.split('\n'):
-    #     sims.append(sim(w))
-    #
-    # with open(f'../embeddings_similarity/embeddings_sim_{1980}.json', 'w') as f:
-    #     json.dump(sims, f, indent=4)
+    with open('../data/target_words/polysemous.txt', 'r') as f:
+        words = f.read()
 
+    for w_ in words.split('\n'):
+        s = []
+        for year in [1980, 1982, 1985, 1987, 1989, 1990, 1995, 2000, 2001, 2002, 2003, 2005, 2008, 2009, 2010, 2012,
+                     2013, 2015, 2016, 2017, 2018]:
+            sim = Similarities(senses_file=SENSES_FILE, examples_file=f'embeddings_{year}.json')
+            s += [sim(w_, year)]
 
-    # embeddings_examples, embeddings_senses = LoadingEmbeddings.load_files(
-    #     root_dir='../embeddings',
-    #     sense_embeddings_file=SENSES_FILE,
-    #     example_embeddings_file='embeddings_1980.json'
-    # )
-    #
-    # with open('../data/target_words/polysemous.txt', 'r') as f:
-    #     words = f.read()
-    #
-    # all_embeds = []
-    # for embed, w in zip(embeddings_examples, words.split('\n')):
-    #     v = Embedding(**embed)
-    #     if Embedding(**embed).word != w:
-    #         v.word = w
-    #
-    #     all_embeds.append(v.copy())
-    #     if Embedding(**embed).word != w:
-    #         print(w)
+        with open(f'../embeddings_similarity/embeddings_sim_{w_}.json', 'w') as f:
+            json.dump(s, f, indent=4)
 

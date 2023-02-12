@@ -47,6 +47,11 @@ class OxfordDictAPI():
         self.oxford_word = {}
 
     def _load_into_json(self, res: Response):
+        res.raise_for_status()
+        if not res.status_code == 200:
+            raise ValueError(
+                f'The API is not responsive, error status code {res.status_code}'
+            )
         json_output = json.dumps(res.json())
         return json.loads(json_output)
 
@@ -135,4 +140,4 @@ class OxfordDictAPI():
 
 
 if __name__ == '__main__':
-    print(OxfordDictAPI('gender').get_senses())
+    print(OxfordDictAPI('abuse').get_senses())

@@ -1,6 +1,9 @@
 
 import json
+import logging
 import os
+import time
+
 from src.api_call import OxfordDictAPI
 from settings import EmbeddingFiles
 
@@ -28,8 +31,11 @@ def perform_on_all_words(path:str):
             f'No matches for the given path: {path}'
         )
     with open(path) as f: full_text = f.read()
-    for word in full_text.split('\n'):
+    for idx, word in enumerate(full_text.split('\n')):
         try:
+            if idx % 10 == 0:
+                print('sleeping')
+                time.sleep(4)
             all_words += [OxfordDictAPI(word_id=word).get_senses()]
             processed_words += [word]
         except ValueError:
@@ -45,6 +51,7 @@ def poly_words(list_words, num_senses: int):
 
 if __name__ == '__main__':
     files = EmbeddingFiles()
+
     with open(files.oxford_word_senses, 'w') as f:
         w, p = perform_on_all_words(files.poly_words_f)
         json.dump(w, f, indent=4)

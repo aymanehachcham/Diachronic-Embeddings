@@ -18,9 +18,9 @@ class OxfordAPIResponse(BaseModel):
 
     @validator('examples')
     def min_len_examples(cls, v):
-        if not len(v) >= 5:
+        if not len(v) >= 1:
             raise ValueError(
-                f'Not Enough examples to compile, given: {len(v)}, expected at least 5'
+                f'Not Enough examples to compile, given: {len(v)}, expected at least 1'
             )
         return v
 
