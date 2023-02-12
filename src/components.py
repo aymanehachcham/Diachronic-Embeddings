@@ -48,6 +48,7 @@ class SenseEmbedding(BaseModel):
 
 class Word(BaseModel):
     word:str
+    year:int
     props:List[float]
 
 class WordFitted(BaseModel):
