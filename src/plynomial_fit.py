@@ -1,10 +1,10 @@
 
-import os.path
 from typing import List
 from components import WordSimilarities
 from dataclasses import dataclass
 import numpy as np
 import matplotlib.pyplot as plt
+import json
 
 @dataclass(frozen=True)
 class PolynomialFitting:
@@ -86,8 +86,5 @@ def plot_words(words:tuple, sense_id_w1:int, sense_id_w2:int):
 
 
 if __name__ == '__main__':
-    import json
-    import numpy as np
-    import matplotlib.pyplot as plt
 
     plot_words(('abuse', 'black'), sense_id_w1=2, sense_id_w2=2)
