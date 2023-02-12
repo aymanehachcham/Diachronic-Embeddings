@@ -35,7 +35,7 @@ def perform_on_all_words(path:str):
         try:
             if idx % 10 == 0:
                 print('sleeping')
-                time.sleep(4)
+                time.sleep(3)
             all_words += [OxfordDictAPI(word_id=word).get_senses()]
             processed_words += [word]
         except ValueError:

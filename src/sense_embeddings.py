@@ -83,9 +83,9 @@ class VectorEmbeddings():
 
             return hidden_states[-2][0][main_token_id]
 
-        except IndexError:
+        except ValueError:
             raise ValueError(
-                f'The word: "{main_word}" does not exist in the list of tokens: {tokens}'
+                f'The word: "{main_word}" does not exist in the list of tokens: {tokens} from {doc}'
             )
 
 

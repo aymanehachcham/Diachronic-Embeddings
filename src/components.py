@@ -22,7 +22,7 @@ class OxfordAPIResponse(BaseModel):
             raise ValueError(
                 f'Not Enough examples to compile, given: {len(v)}, expected at least 1'
             )
-        return v
+        return v[:10]
 
 class SenseEmbedding(BaseModel):
     sense:str = None
@@ -46,7 +46,7 @@ class SenseEmbedding(BaseModel):
         return np.array(self.embedding)
 
 
-class Word(BaseModel):
+class WordSimilarities(BaseModel):
     word:str
     year:int
     props:List[float]
