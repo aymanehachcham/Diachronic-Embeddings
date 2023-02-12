@@ -19,41 +19,72 @@ if __name__ == '__main__':
     import json
     import numpy as np
 
+    word = 'appoint'
+    with open(f'../embeddings_similarity/embeddings_sim_{word}.json', 'r') as f:
+        sims = json.load(f)
+
     sense_1 = []
     sense_2 = []
     sense_3 = []
-    sense_4 = []
-    sense_5 = []
-    sense_6 = []
     years = []
-    for year in range(1980, 2020, 5):
-        with open(f'../embeddings_similarity/embeddings_sim_{year}.json', 'r') as f:
-            sims = json.load(f)
+    for sim in sims:
+        y = sim['year']
+        s1 = sim['props'][0]
+        s2 = sim['props'][1]
+        # s3 = sim['props'][2]
+        sense_1 += [s1]
+        sense_2 += [s2]
+        # sense_3 += [s2]
+        years += [y]
 
-        abuse = Word(**sims[0])
-        proportion_sense_0 = abuse.props[0]
-        proportion_sense_1 = abuse.props[1]
-        proportion_sense_2 = abuse.props[2]
-
-        sense_1.append(proportion_sense_0)
-        sense_2.append(proportion_sense_1)
-        sense_3.append(proportion_sense_2)
-
-        years.append(year)
-
-    xp = np.linspace(1980, 2015, 100)
+    xp = np.linspace(1980, 2018, 100)
     p = np.poly1d(np.polyfit(years, sense_1, 20))
     p2 = np.poly1d(np.polyfit(years, sense_2, 20))
-    p3 = np.poly1d(np.polyfit(years, sense_3, 20))
-    print(sense_1, '\n', sense_2)
-
+    # p3 = np.poly1d(np.polyfit(years, sense_3, 20))
     import matplotlib.pyplot as plt
 
     plt.plot(years, sense_1, '.', years, sense_2, '*',
-             years, sense_3, '+',
-             xp, p(xp), '-', xp, p2(xp), '--', xp, p3(xp), '--')
+             xp, p(xp), '-', xp, p2(xp), '--')
     plt.ylim(0, 1)
     plt.show()
+
+
+
+    # sense_1 = []
+    # sense_2 = []
+    # sense_3 = []
+    # sense_4 = []
+    # sense_5 = []
+    # sense_6 = []
+    # years = []
+    # for year in range(1980, 2020, 5):
+    #     with open(f'../embeddings_similarity/embeddings_sim_{year}.json', 'r') as f:
+    #         sims = json.load(f)
+    #
+    #     abuse = Word(**sims[0])
+    #     proportion_sense_0 = abuse.props[0]
+    #     proportion_sense_1 = abuse.props[1]
+    #     proportion_sense_2 = abuse.props[2]
+    #
+    #     sense_1.append(proportion_sense_0)
+    #     sense_2.append(proportion_sense_1)
+    #     sense_3.append(proportion_sense_2)
+    #
+    #     years.append(year)
+    #
+    # xp = np.linspace(1980, 2015, 100)
+    # p = np.poly1d(np.polyfit(years, sense_1, 20))
+    # p2 = np.poly1d(np.polyfit(years, sense_2, 20))
+    # p3 = np.poly1d(np.polyfit(years, sense_3, 20))
+    # print(sense_1, '\n', sense_2)
+    #
+    # import matplotlib.pyplot as plt
+    #
+    # plt.plot(years, sense_1, '.', years, sense_2, '*',
+    #          years, sense_3, '+',
+    #          xp, p(xp), '-', xp, p2(xp), '--', xp, p3(xp), '--')
+    # plt.ylim(0, 1)
+    # plt.show()
 
 
 
