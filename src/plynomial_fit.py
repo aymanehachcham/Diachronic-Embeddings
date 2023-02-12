@@ -1,39 +1,38 @@
 
-import os.path
 from typing import List
 from components import WordSimilarities
 from dataclasses import dataclass
 import numpy as np
 import matplotlib.pyplot as plt
+import json
 
-@dataclass(frozen=True)
 class PolynomialFitting:
-    word:str
-    years:List[str] = None
-    def _load_elements(self):
+    def __init__(
+            self,
+            word:str
+        ):
+        self.sense_proportion_distribution = []
+        self.word = word
+        self.years = [1980, 1982, 1985, 1987, 1989, 1990, 1995, 2000, 2001, 2002, 2003, 2005, 2008, 2009, 2010, 2012,
+                     2013, 2015, 2016, 2017, 2018]
         with open(f'../embeddings_similarity/embeddings_sim_{self.word}.json') as f:
             word_props = json.load(f)
 
-        sense_proportion_distribution = []
         for w_ in word_props:
-             sense_proportion_distribution += [WordSimilarities(**w_).props]
+             self.sense_proportion_distribution += [WordSimilarities(**w_).props]
+        self.num_senses = len(self.sense_proportion_distribution[0])
 
-        return sense_proportion_distribution
 
     def sense_distribution(self, sense_idx):
-        proportions = self._load_elements()
-        if not sense_idx in range(0, len(proportions[0])+1):
+        if not sense_idx in range(0, self.num_senses + 1):
             raise ValueError(
                 f'The sense index {sense_idx} not present in the range of senses available for the word {self.word}'
             )
-        return [props_[sense_idx] for props_ in proportions]
+        return [props_[sense_idx] for props_ in self.sense_proportion_distribution]
 
     def polynomial_fit(self, sense: int, deg:int=20):
-        years = [1980, 1982, 1985, 1987, 1989, 1990, 1995, 2000, 2001, 2002, 2003, 2005, 2008, 2009, 2010, 2012,
-                     2013, 2015, 2016, 2017, 2018]
         dist = self.sense_distribution(sense)
-
-        return np.poly1d(np.polyfit(years, dist, deg)), years
+        return np.poly1d(np.polyfit(self.years, dist, deg)), self.years
 
     def distribution_all_senses(self, senses:list):
         all_senses = []
@@ -86,8 +85,4 @@ def plot_words(words:tuple, sense_id_w1:int, sense_id_w2:int):
 
 
 if __name__ == '__main__':
-    import json
-    import numpy as np
-    import matplotlib.pyplot as plt
-
     plot_words(('abuse', 'black'), sense_id_w1=2, sense_id_w2=2)
