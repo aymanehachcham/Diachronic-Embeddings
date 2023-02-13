@@ -1,4 +1,4 @@
-
+import random
 from typing import List
 from components import WordSimilarities
 from dataclasses import dataclass
@@ -56,10 +56,12 @@ def plot_word(word:str):
     xp = np.linspace(1980, 2018, 100)
 
     fig, ax = plt.subplots()
-    objects = ['+', '*', '-', 'o']
+    markers = ['o', 'v', '^', 's', 'p', 'P', 'h', 'H', 'D']
+    random.shuffle(markers)
 
-    for sense, obj in zip(poly_w1.distribution_all_senses([0, 1, 2, 3]), objects):
-        ax.plot(sense['years'], sense['distribution'], f'{obj}', xp, sense['polynomial_fit'](xp), '-', label=f'{word}, for the sense: {sense["sense_id"]}')
+    for sense, obj in zip(poly_w1.distribution_all_senses(list(range(0, poly_w1.num_senses-1))), markers[:poly_w1.num_senses]):
+        ax.plot(sense['years'], sense['distribution'], f'{obj}', label=f'{word}, for the sense: {sense["sense_id"]}')
+        ax.plot(xp, sense['polynomial_fit'](xp), '-')
 
     plt.ylim(0, 1)
     ax.legend()
@@ -79,8 +81,10 @@ def plot_words(words:tuple, sense_id_w1:int, sense_id_w2:int):
     p_2, _ = poly_w2.polynomial_fit(sense=sense_id_w2, deg=20)
 
     fig, ax = plt.subplots()
-    ax.plot(y_1, dist_1, '*', xp, p_1(xp), '-', label=f'{w_1}, for the sense: {sense_id_w1}')
-    ax.plot(y_1, dist_2, '*', xp, p_2(xp), '-', label=f'{w_2} for the sense: {sense_id_w2}')
+    ax.plot(y_1, dist_1, '*', label=f'{w_1}, for the sense: {sense_id_w1}')
+    ax.plot(xp, p_1(xp), '-', )
+    ax.plot(y_1, dist_2, '*', label=f'{w_2} for the sense: {sense_id_w2}')
+    ax.plot(xp, p_2(xp), '-',)
 
     # plt.ylim(0, 0.2)
     ax.legend()
@@ -89,3 +93,4 @@ def plot_words(words:tuple, sense_id_w1:int, sense_id_w2:int):
 
 if __name__ == '__main__':
     plot_words(('abuse', 'black'), sense_id_w1=2, sense_id_w2=2)
+    # plot_word('black')
