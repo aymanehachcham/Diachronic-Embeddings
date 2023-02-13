@@ -24,7 +24,7 @@ class EmbeddingFiles(BaseSettings):
     poly_words_f:str = '../data/target_words/polysemous.txt'
     oxford_word_senses: str = '../data/target_words/senses_oxford_api.json'
     sense_embeddings: str = '../embeddings/embeddings_for_senses.json'
-
+    embeddings_root_dit:str = '../embeddings'
 
 if __name__ == '__main__':
     print(OxfordAPISettings())

@@ -3,10 +3,9 @@ import os
 import json
 from numpy.linalg import norm
 from components import Embedding, SenseEmbedding
+from settings import EmbeddingFiles
 import logging
 import numpy as np
-
-SENSES_FILE = 'embeddings_for_senses.json'
 
 class LoadingEmbeddings():
 
@@ -20,7 +19,7 @@ class LoadingEmbeddings():
         logging.basicConfig(level=logging.NOTSET)
 
         with open(os.path.join(root_dir, sense_embeddings_file), 'r') as f:
-            logging.info('{} Loading File {} {}'.format('-' * 10, f.name, '-' * 10))
+            logging.info(f'{"-" * 10} Loading the embeddings for senses: {f.name} {"-" * 10}')
             senses_embeds = json.load(f)
 
         return senses_embeds
@@ -32,23 +31,24 @@ class Similarities():
             senses_file:str,
         ):
 
+        self.files = EmbeddingFiles()
         self.embeddings_senses = LoadingEmbeddings.load_files(
-            root_dir='../embeddings',
+            root_dir=self.files.embeddings_root_dit,
             sense_embeddings_file=senses_file,
         )
 
         self.embeddings_examples = None
-        self.root_dir = '../embeddings'
+        self.root_dir = self.files.embeddings_root_dit
         self.word_sense_proportions = {}
 
-        with open('../data/target_words/polysemous.txt', 'r') as f:
+        with open(self.files.poly_words_f, 'r') as f:
             self.words = f.read()
 
 
     def _lookup_examples_that_match(self, words):
         if self.embeddings_examples is None:
             raise ValueError(
-                'Embedding examples not initalized'
+                'Embedding examples not initialized'
             )
 
         embeddings = []
@@ -69,10 +69,10 @@ class Similarities():
 
     def __call__(self, main_word:str, year:int, path_embeddings_file:str):
         from collections import Counter
-        print(f'{"-" * 10} Similarities for the word {main_word} {"-" * 10}')
+        print(f'{"-" * 10} Computing Similarities for the word {main_word} {"-" * 10}')
 
         with open(os.path.join(self.root_dir, path_embeddings_file), 'r') as f:
-            logging.info('{} Loading File {} {}'.format('-' * 10, f.name, '-' * 10))
+            logging.info(f'{"-" * 10} Loading the embeddings examples file: {f.name} {"-" * 10}')
             self.embeddings_examples = json.load(f)
 
         self.all_embeddings = list(self._lookup_examples_that_match(self.words))
@@ -89,19 +89,19 @@ class Similarities():
             for ex in embed.embeddings:
                 s_argmax = np.argmax([self._cos_sim(np.array(ex), np.array(s.embedding)) for s in w_senses])
                 all_sims += [w_senses[s_argmax].id]
-        #
+
             self.word_sense_proportions['word'] = main_word
             self.word_sense_proportions['year'] = year
             self.word_sense_proportions['props'] = list(map(lambda x: x[1]/len(all_sims), Counter(all_sims).most_common()))
-        #
+
         return self.word_sense_proportions.copy()
 
 
 def sim_on_all_words():
-    with open('../data/target_words/polysemous.txt', 'r') as f:
-        words = f.read()
+    sim = Similarities(senses_file=EmbeddingFiles().sense_embeddings)
 
-    sim = Similarities(senses_file=SENSES_FILE)
+    with open(sim.files.poly_words_f, 'r') as f:
+        words = f.read()
 
     for w_ in words.split('\n')[:1]:
         s = []
@@ -109,7 +109,7 @@ def sim_on_all_words():
 
             s += [sim(w_, year, path_embeddings_file=f'embeddings_{year}.json')]
 
-        with open(f'../embeddings_similarity/embeddings_sim_{"lola"}.json', 'w') as f:
+        with open(f'../embeddings_similarity/embeddings_sim_{w_}.json', 'w') as f:
             json.dump(s, f, indent=4)
         break
 

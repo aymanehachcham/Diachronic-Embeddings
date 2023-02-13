@@ -1,7 +1,7 @@
 import requests
 from requests.models import Response
 import json
-from typing import List, Dict
+from typing import Dict
 from itertools import chain
 import re
 from nltk import WordNetLemmatizer
