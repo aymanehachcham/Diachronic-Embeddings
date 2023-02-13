@@ -1,10 +1,12 @@
+
 import random
-from typing import List
 from components import WordSimilarities
-from dataclasses import dataclass
 import numpy as np
 import matplotlib.pyplot as plt
 import json
+from scipy.interpolate import BSpline, splrep
+from typing import Union, Literal
+
 
 class PolynomialFitting:
     def __init__(
@@ -34,8 +36,10 @@ class PolynomialFitting:
         dist = self.sense_distribution(sense)
         return np.poly1d(np.polyfit(self.years, dist, deg)), self.years
 
-    def spline_fit(self):
-        pass
+    def spline_fit(self, sense:int):
+        dist = self.sense_distribution(sense)
+        tck_spline_args = splrep(self.years, dist, s=0, k=3)
+        return BSpline(*tck_spline_args)
 
     def distribution_all_senses(self, senses:list):
         all_senses = []
@@ -51,17 +55,32 @@ class PolynomialFitting:
 
         return all_senses
 
-def plot_word(word:str):
-    poly_w1 = PolynomialFitting(word=word)
-    xp = np.linspace(1980, 2018, 100)
+def plot_word(word:str, fit:Literal['ploynomial', 'bspline']):
+    if not fit in ['polynomial', 'bspline']:
+        raise ValueError(
+            f'The fir type provided is not correct, expected "polynomial" or "bspline", got {type(fit)}'
+        )
 
     fig, ax = plt.subplots()
     markers = ['o', 'v', '^', 's', 'p', 'P', 'h', 'H', 'D']
     random.shuffle(markers)
+    poly_w1 = PolynomialFitting(word=word)
+    xp = np.linspace(1980, 2018, 100)
 
-    for sense, obj in zip(poly_w1.distribution_all_senses(list(range(0, poly_w1.num_senses-1))), markers[:poly_w1.num_senses]):
-        ax.plot(sense['years'], sense['distribution'], f'{obj}', label=f'{word}, for the sense: {sense["sense_id"]}')
-        ax.plot(xp, sense['polynomial_fit'](xp), '-')
+    distr_all_senses = poly_w1.distribution_all_senses(list(range(0, poly_w1.num_senses - 1)))
+
+    if fit == 'polynomial':
+        for sense, obj in zip(distr_all_senses, markers[:poly_w1.num_senses]):
+            ax.plot(sense['years'], sense['distribution'], f'{obj}', label=f'{word}, for the sense: {sense["sense_id"]}')
+            ax.plot(xp, sense['polynomial_fit'](xp), '-')
+
+    if fit == 'bspline':
+        for sense, obj in zip(distr_all_senses, markers[:poly_w1.num_senses]):
+
+
+
+
+
 
     plt.ylim(0, 1)
     ax.legend()
@@ -92,5 +111,18 @@ def plot_words(words:tuple, sense_id_w1:int, sense_id_w2:int):
 
 
 if __name__ == '__main__':
-    plot_words(('abuse', 'black'), sense_id_w1=2, sense_id_w2=2)
+    # plot_words(('abuse', 'black'), sense_id_w1=2, sense_id_w2=2)
     # plot_word('black')
+
+    p = PolynomialFitting('abuse')
+    # from scipy import interpolate
+    # import matplotlib.pyplot as plt
+    # import numpy as np
+    #
+    # y = [0, 1, 3, 4, 3, 5, 7, 5, 2, 3, 4, 8, 9, 8, 7]
+    # n = len(y)
+    # x = range(0, n)
+    #
+    # tck = interpolate.splrep(x, y, s=0, k=3)
+    # # x_new = np.linspace(min(x), max(x), 100)
+    print(p.spline_fit(0))
