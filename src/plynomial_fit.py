@@ -5,7 +5,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import json
 from scipy.interpolate import BSpline, splrep
-from typing import Union, Literal
+from typing import Literal
+import warnings
+from settings import EmbeddingFiles
 
 
 class PolynomialFitting:
@@ -13,10 +15,10 @@ class PolynomialFitting:
             self,
             word:str
         ):
+        self.files = EmbeddingFiles()
         self.sense_proportion_distribution = []
         self.word = word
-        self.years = [1980, 1982, 1985, 1987, 1989, 1990, 1995, 2000, 2001, 2002, 2003, 2005, 2008, 2009, 2010, 2012,
-                     2013, 2015, 2016, 2017, 2018]
+        self.years =
         with open(f'../embeddings_similarity/embeddings_sim_{self.word}.json') as f:
             word_props = json.load(f)
 
@@ -33,29 +35,35 @@ class PolynomialFitting:
         return [props_[sense_idx] for props_ in self.sense_proportion_distribution]
 
     def polynomial_fit(self, sense: int, deg:int=20):
+        warnings.filterwarnings('ignore')
         dist = self.sense_distribution(sense)
-        return np.poly1d(np.polyfit(self.years, dist, deg)), self.years
+        return np.poly1d(np.polyfit(self.years, dist, deg))
 
     def spline_fit(self, sense:int):
         dist = self.sense_distribution(sense)
         tck_spline_args = splrep(self.years, dist, s=0, k=3)
         return BSpline(*tck_spline_args)
 
-    def distribution_all_senses(self, senses:list):
+    def distribution_all_senses(self, fit:Literal['polynomial', 'bspline']):
         all_senses = []
         sense_ = {}
-        for sense_num in senses:
-            fit, y = self.polynomial_fit(sense_num)
-            sense_['years'] = y
+        xp = np.linspace(1980, 2018, 100)
+        for sense_num in range(0, self.num_senses-1):
+            sense_['years'] = self.years
             sense_['distribution'] = self.sense_distribution(sense_num)
-            sense_['polynomial_fit'] = fit
             sense_['sense_id'] = sense_num
+
+            if fit == 'polynomial':
+                sense_['y_fit'] = self.polynomial_fit(sense_num)
+
+            if fit == 'bspline':
+                sense_['y_fit'] = self.spline_fit(sense_num)(xp)
 
             all_senses += [sense_.copy()]
 
         return all_senses
 
-def plot_word(word:str, fit:Literal['ploynomial', 'bspline']):
+def plot_word(word:str, fit:Literal['polynomial', 'bspline']):
     if not fit in ['polynomial', 'bspline']:
         raise ValueError(
             f'The fir type provided is not correct, expected "polynomial" or "bspline", got {type(fit)}'
@@ -67,20 +75,17 @@ def plot_word(word:str, fit:Literal['ploynomial', 'bspline']):
     poly_w1 = PolynomialFitting(word=word)
     xp = np.linspace(1980, 2018, 100)
 
-    distr_all_senses = poly_w1.distribution_all_senses(list(range(0, poly_w1.num_senses - 1)))
-
     if fit == 'polynomial':
+        distr_all_senses = poly_w1.distribution_all_senses(fit='polynomial')
         for sense, obj in zip(distr_all_senses, markers[:poly_w1.num_senses]):
             ax.plot(sense['years'], sense['distribution'], f'{obj}', label=f'{word}, for the sense: {sense["sense_id"]}')
-            ax.plot(xp, sense['polynomial_fit'](xp), '-')
+            ax.plot(xp, sense['y_fit'](xp), '-')
 
     if fit == 'bspline':
+        distr_all_senses = poly_w1.distribution_all_senses(fit='bspline')
         for sense, obj in zip(distr_all_senses, markers[:poly_w1.num_senses]):
-
-
-
-
-
+            ax.plot(sense['years'], sense['distribution'], f'{obj}', label=f'{word}, for the sense: {sense["sense_id"]}')
+            ax.plot(xp, sense['y_fit'], '-')
 
     plt.ylim(0, 1)
     ax.legend()
@@ -112,9 +117,9 @@ def plot_words(words:tuple, sense_id_w1:int, sense_id_w2:int):
 
 if __name__ == '__main__':
     # plot_words(('abuse', 'black'), sense_id_w1=2, sense_id_w2=2)
-    # plot_word('black')
+    plot_word('black', fit='polynomial')
 
-    p = PolynomialFitting('abuse')
+    # p = PolynomialFitting('abuse')
     # from scipy import interpolate
     # import matplotlib.pyplot as plt
     # import numpy as np
@@ -125,4 +130,3 @@ if __name__ == '__main__':
     #
     # tck = interpolate.splrep(x, y, s=0, k=3)
     # # x_new = np.linspace(min(x), max(x), 100)
-    print(p.spline_fit(0))
