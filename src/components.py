@@ -24,28 +24,6 @@ class OxfordAPIResponse(BaseModel):
             )
         return v[:10]
 
-class SenseEmbedding(BaseModel):
-    sense:str = None
-    definition:str = None
-    embedding:List[float] = None
-
-    class Config:
-        allow_population_by_field_name = True
-
-    def __call__(self, **kwargs):
-        self.id = kwargs['id']
-        self.definition = kwargs['definition']
-        self.examples = kwargs['embedding']
-
-    @property
-    def get_embeddings(self):
-        if self.embedding is None:
-            raise ValueError(
-                f'The Embeddings provided are null: {self.embedding}'
-            )
-        return np.array(self.embedding)
-
-
 class WordSimilarities(BaseModel):
     word:str
     year:int
@@ -59,22 +37,19 @@ class WordFitted(BaseModel):
     poly_fit:List[float]
 
 
+class SenseEmbedding(BaseModel):
+    id: str
+    definition: str
+    embedding: List[float]
+
+    class Config:
+        allow_population_by_field_name = True
 
 
 class Embedding(BaseModel):
-    word: str
-    sentence_number_index: List[List]
-    embeddings: List[List]
+    word: str = None
+    sentence_number_index: List[List] = None
+    embeddings: List[List] = None
 
-    @property
-    def get_embeddings(self):
-        if self.embeddings is None:
-            raise ValueError(
-                f'The Embeddings provided are null: {self.embeddings}'
-            )
-        return np.array(self.embeddings)
-
-
-if __name__ == '__main__':
-    w = Word(word='lola', props=[0.4, 0.5])
-    w.email = 'hello'
+    class Config:
+        allow_population_by_field_name = True
