@@ -1,26 +1,12 @@
 
 import os
-import logging
 import json
 from numpy.linalg import norm
-from pydantic import BaseModel, validator
-from typing import List
+from components import Embedding, SenseEmbedding
 import logging
-
 import numpy as np
 
 SENSES_FILE = 'embeddings_for_senses.json'
-
-class SenseEmbedding(BaseModel):
-    id:str
-    definition:str
-    embedding:List[float]
-
-
-class Embedding(BaseModel):
-    word: str
-    sentence_number_index: List[List]
-    embeddings: List[List]
 
 class LoadingEmbeddings():
 
@@ -117,15 +103,15 @@ def sim_on_all_words():
 
     sim = Similarities(senses_file=SENSES_FILE)
 
-    for w_ in words.split('\n')[1:]:
+    for w_ in words.split('\n')[:1]:
         s = []
-        for year in [1980, 1982, 1985, 1987, 1989, 1990, 1995, 2000, 2001, 2002, 2003, 2005, 2008, 2009, 2010, 2012,
-                     2013, 2015, 2016, 2017, 2018]:
+        for year in [1980]:
 
             s += [sim(w_, year, path_embeddings_file=f'embeddings_{year}.json')]
 
-        with open(f'../embeddings_similarity/embeddings_sim_{w_}.json', 'w') as f:
+        with open(f'../embeddings_similarity/embeddings_sim_{"lola"}.json', 'w') as f:
             json.dump(s, f, indent=4)
+        break
 
 
 if __name__ == '__main__':
