@@ -34,6 +34,9 @@ class PolynomialFitting:
         dist = self.sense_distribution(sense)
         return np.poly1d(np.polyfit(self.years, dist, deg)), self.years
 
+    def spline_fit(self):
+        pass
+
     def distribution_all_senses(self, senses:list):
         all_senses = []
         sense_ = {}
