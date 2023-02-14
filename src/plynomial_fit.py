@@ -3,7 +3,6 @@ import random
 from components import WordSimilarities
 import numpy as np
 import matplotlib.pyplot as plt
-import json
 from scipy.interpolate import BSpline, splrep
 from typing import Literal
 import warnings
