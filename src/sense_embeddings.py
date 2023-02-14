@@ -6,6 +6,7 @@ from transformers import BertTokenizer, BertModel
 from transformers import logging
 from settings import EmbeddingFiles
 from components import SenseEmbedding, OxfordAPIResponse
+from settings import FileLoader
 
 
 class VectorEmbeddings():
@@ -68,6 +69,7 @@ class ExtractSenseEmbeddings():
         self.word = None
         self.vector_embeddings = VectorEmbeddings()
         self.api_component = OxfordAPIResponse()
+        self.all_words = FileLoader.load_files(self.__class__.__name__)
 
     def __call__(self, sense:dict, main_w):
         if not isinstance(sense, dict):
@@ -92,26 +94,22 @@ class ExtractSenseEmbeddings():
 
         return self.sense
 
+    def create_sense_embeddings(self):
+        all_embeddings = []
+        for word in self.all_words:
+            print(f'{"-"*40} Embedding the word {word["word"]} {"-"*40} ')
+            word['senses'] = [self(sens, word["word"]).infer_mean_vector() for sens in word['senses']]
+            all_embeddings += [word.copy()]
 
-def create_sense_embeddings():
-    files = EmbeddingFiles()
-    with open(files.oxford_word_senses) as f: all_words = json.load(f)
-    sens_embedding = ExtractSenseEmbeddings()
-
-    all_embeddings = []
-    for word in all_words:
-        print(f'{"-"*40} Embedding the word {word["word"]} {"-"*40} ')
-        word['senses'] = [sens_embedding(sens, word["word"]).infer_mean_vector() for sens in word['senses']]
-        all_embeddings += [word.copy()]
-
-    return all_embeddings
+        return all_embeddings
 
 
 
 if __name__ == '__main__':
     import json
+    e = ExtractSenseEmbeddings()
     with open('../embeddings/embeddings_for_senses.json', 'w') as f:
-            json.dump(create_sense_embeddings(), f, indent=4)
+            json.dump(e.create_sense_embeddings(), f, indent=4)
 
 
 

@@ -33,24 +33,40 @@ class FileLoader():
     def load_files(
             cls,
             module:str,
+            file_keyword:str=None
         ):
-        if not module in ['Similarities']:
+        if not module in ['Similarities', 'ExtractSenseEmbeddings', 'PolynomialFitting']:
             raise ValueError(
                 f'The module {module} does not exist'
             )
 
         logging.basicConfig(level=logging.NOTSET)
         files = EmbeddingFiles()
+
+        with open(files.poly_words_f, 'r') as f:
+            words = f.read()
+
         if module == 'Similarities':
             with open(files.sense_embeddings, 'r') as f:
                 logging.info(f'{"-" * 10} Loading the embeddings for senses: {f.name} {"-" * 10}')
                 senses_embeds = json.load(f)
 
-            with open(files.poly_words_f, 'r') as f:
-                words = f.read()
-
             return senses_embeds, words
 
+        if module == 'ExtractSenseEmbeddings':
+            with open(files.oxford_word_senses) as f: all_words = json.load(f)
+            return all_words
+
+        if module == 'PolynomialFitting':
+            if not file_keyword in words.split('\n'):
+                raise ValueError(
+                    f'The specified keyword: {file_keyword} does not apply to any similarity embedding file'
+                )
+
+            with open(f'../embeddings_similarity/embeddings_sim_{file_keyword}.json') as f:
+                word_props = json.load(f)
+
+            return word_props, words
 
 
 if __name__ == '__main__':

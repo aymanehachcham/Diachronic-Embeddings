@@ -7,7 +7,7 @@ import json
 from scipy.interpolate import BSpline, splrep
 from typing import Literal
 import warnings
-from settings import EmbeddingFiles
+from settings import EmbeddingFiles, FileLoader
 
 
 class PolynomialFitting:
@@ -20,13 +20,9 @@ class PolynomialFitting:
         self.word = word
         self.years = self.files.years_used
 
-        with open(f'../embeddings_similarity/embeddings_sim_{self.word}.json') as f:
-            word_props = json.load(f)
+        self.word_props, self.words = FileLoader.load_files(self.__class__.__name__, word)
 
-        with open(self.files.poly_words_f, 'r') as f:
-            self.words = f
-
-        for w_ in word_props:
+        for w_ in self.word_props:
              self.sense_proportion_distribution += [WordSimilarities(**w_).props]
         self.num_senses = len(self.sense_proportion_distribution[0])
 

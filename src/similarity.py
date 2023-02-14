@@ -6,6 +6,7 @@ from components import Embedding, SenseEmbedding
 from settings import EmbeddingFiles, FileLoader
 import logging
 import numpy as np
+from collections import Counter
 
 class Similarities():
     def __init__(
@@ -45,7 +46,6 @@ class Similarities():
         return (vect_a @ vect_b)/(norm(vect_a) * norm(vect_b))
 
     def __call__(self, main_word:str, year:int, path_embeddings_file:str):
-        from collections import Counter
         print(f'{"-" * 10} Computing Similarities for the word {main_word} {"-" * 10}')
 
         with open(os.path.join(self.root_dir, path_embeddings_file), 'r') as f:
