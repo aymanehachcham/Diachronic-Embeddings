@@ -16,3 +16,4 @@ embeddings/
 embeddings_similarity/
 .DS_Store
 src/API_credentials/
+.env
