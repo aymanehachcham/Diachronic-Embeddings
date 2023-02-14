@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import json
 from scipy.interpolate import BSpline, splrep
-from typing import Literal
+from typing import Literal, List
 import warnings
 from settings import EmbeddingFiles
 
@@ -18,9 +18,13 @@ class PolynomialFitting:
         self.files = EmbeddingFiles()
         self.sense_proportion_distribution = []
         self.word = word
-        self.years =
+        self.years = self.files.years_used
+
         with open(f'../embeddings_similarity/embeddings_sim_{self.word}.json') as f:
             word_props = json.load(f)
+
+        with open(self.files.poly_words_f, 'r') as f:
+            self.words = f
 
         for w_ in word_props:
              self.sense_proportion_distribution += [WordSimilarities(**w_).props]
@@ -48,7 +52,7 @@ class PolynomialFitting:
         all_senses = []
         sense_ = {}
         xp = np.linspace(1980, 2018, 100)
-        for sense_num in range(0, self.num_senses-1):
+        for sense_num in range(0, self.num_senses):
             sense_['years'] = self.years
             sense_['distribution'] = self.sense_distribution(sense_num)
             sense_['sense_id'] = sense_num
@@ -66,7 +70,7 @@ class PolynomialFitting:
 def plot_word(word:str, fit:Literal['polynomial', 'bspline']):
     if not fit in ['polynomial', 'bspline']:
         raise ValueError(
-            f'The fir type provided is not correct, expected "polynomial" or "bspline", got {type(fit)}'
+            f'The fit type provided is not correct, expected "polynomial" or "bspline", got {type(fit)}'
         )
 
     fig, ax = plt.subplots()
@@ -91,24 +95,44 @@ def plot_word(word:str, fit:Literal['polynomial', 'bspline']):
     ax.legend()
     plt.show()
 
-def plot_words(words:tuple, sense_id_w1:int, sense_id_w2:int):
-    w_1, w_2 = words
+def plot_words(words:tuple, sense_id_w1:int, sense_id_w2:int, sense_id_w3:int, fit:Literal['polynomial', 'bspline']):
+    w_1, w_2, w_3= words
 
     poly_w1 = PolynomialFitting(word=w_1)
     poly_w2 = PolynomialFitting(word=w_2)
+    poly_w3 = PolynomialFitting(word=w_3)
 
     xp = np.linspace(1980, 2018, 100)
+    fig, ax = plt.subplots()
     dist_1 = poly_w1.sense_distribution(sense_idx=sense_id_w1)
     dist_2 = poly_w2.sense_distribution(sense_idx=sense_id_w2)
+    dist_3 = poly_w3.sense_distribution(sense_idx=sense_id_w3)
 
-    p_1, y_1 = poly_w1.polynomial_fit(sense=sense_id_w1, deg=20)
-    p_2, _ = poly_w2.polynomial_fit(sense=sense_id_w2, deg=20)
+    if fit == 'polynomial':
+        p_1 = poly_w1.polynomial_fit(sense=sense_id_w1, deg=20)
+        p_2 = poly_w2.polynomial_fit(sense=sense_id_w2, deg=20)
+        p_3 = poly_w3.polynomial_fit(sense=sense_id_w3, deg=20)
 
-    fig, ax = plt.subplots()
-    ax.plot(y_1, dist_1, '*', label=f'{w_1}, for the sense: {sense_id_w1}')
-    ax.plot(xp, p_1(xp), '-', )
-    ax.plot(y_1, dist_2, '*', label=f'{w_2} for the sense: {sense_id_w2}')
-    ax.plot(xp, p_2(xp), '-',)
+        ax.plot(poly_w1.years, dist_1, '*', label=f'{w_1}, for the sense: {sense_id_w1}')
+        ax.plot(xp, p_1(xp), '-', )
+        ax.plot(poly_w1.years, dist_2, '*', label=f'{w_2} for the sense: {sense_id_w2}')
+        ax.plot(xp, p_2(xp), '-',)
+
+        ax.plot(poly_w1.years, dist_3, '+', label=f'{w_3} for the sense: {sense_id_w3}')
+        ax.plot(xp, p_3(xp), '-', )
+
+    if fit == 'bspline':
+        b_1 = poly_w1.spline_fit(sense=sense_id_w1)
+        b_2 = poly_w2.spline_fit(sense=sense_id_w2)
+        b_3 = poly_w3.spline_fit(sense=sense_id_w3)
+
+        ax.plot(poly_w1.years, dist_1, '*', label=f'{w_1}, for the sense: {sense_id_w1}')
+        ax.plot(xp, b_1(xp), '-', )
+        ax.plot(poly_w1.years, dist_2, '*', label=f'{w_2} for the sense: {sense_id_w2}')
+        ax.plot(xp, b_2(xp), '-', )
+
+        ax.plot(poly_w1.years, dist_3, '+', label=f'{w_3} for the sense: {sense_id_w3}')
+        ax.plot(xp, b_3(xp), '-', )
 
     # plt.ylim(0, 0.2)
     ax.legend()
@@ -116,8 +140,8 @@ def plot_words(words:tuple, sense_id_w1:int, sense_id_w2:int):
 
 
 if __name__ == '__main__':
-    # plot_words(('abuse', 'black'), sense_id_w1=2, sense_id_w2=2)
-    plot_word('black', fit='polynomial')
+    plot_words(('abuse', 'black', 'kill'), sense_id_w1=2, sense_id_w2=2, sense_id_w3=2, fit='bspline')
+    # plot_word('abuse', fit='bspline')
 
     # p = PolynomialFitting('abuse')
     # from scipy import interpolate
