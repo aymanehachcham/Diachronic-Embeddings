@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import json
 from scipy.interpolate import BSpline, splrep
-from typing import Literal, List
+from typing import Literal
 import warnings
 from settings import EmbeddingFiles
 
@@ -43,7 +43,7 @@ class PolynomialFitting:
         dist = self.sense_distribution(sense)
         return np.poly1d(np.polyfit(self.years, dist, deg))
 
-    def spline_fit(self, sense:int):
+    def bspline_fit(self, sense:int):
         dist = self.sense_distribution(sense)
         tck_spline_args = splrep(self.years, dist, s=0, k=3)
         return BSpline(*tck_spline_args)
@@ -61,7 +61,7 @@ class PolynomialFitting:
                 sense_['y_fit'] = self.polynomial_fit(sense_num)
 
             if fit == 'bspline':
-                sense_['y_fit'] = self.spline_fit(sense_num)(xp)
+                sense_['y_fit'] = self.bspline_fit(sense_num)(xp)
 
             all_senses += [sense_.copy()]
 
@@ -91,7 +91,6 @@ def plot_word(word:str, fit:Literal['polynomial', 'bspline']):
             ax.plot(sense['years'], sense['distribution'], f'{obj}', label=f'{word}, for the sense: {sense["sense_id"]}')
             ax.plot(xp, sense['y_fit'], '-')
 
-    plt.ylim(0, 1)
     ax.legend()
     plt.show()
 
@@ -122,9 +121,9 @@ def plot_words(words:tuple, sense_id_w1:int, sense_id_w2:int, sense_id_w3:int, f
         ax.plot(xp, p_3(xp), '-', )
 
     if fit == 'bspline':
-        b_1 = poly_w1.spline_fit(sense=sense_id_w1)
-        b_2 = poly_w2.spline_fit(sense=sense_id_w2)
-        b_3 = poly_w3.spline_fit(sense=sense_id_w3)
+        b_1 = poly_w1.bspline_fit(sense=sense_id_w1)
+        b_2 = poly_w2.bspline_fit(sense=sense_id_w2)
+        b_3 = poly_w3.bspline_fit(sense=sense_id_w3)
 
         ax.plot(poly_w1.years, dist_1, '*', label=f'{w_1}, for the sense: {sense_id_w1}')
         ax.plot(xp, b_1(xp), '-', )
@@ -134,23 +133,11 @@ def plot_words(words:tuple, sense_id_w1:int, sense_id_w2:int, sense_id_w3:int, f
         ax.plot(poly_w1.years, dist_3, '+', label=f'{w_3} for the sense: {sense_id_w3}')
         ax.plot(xp, b_3(xp), '-', )
 
-    # plt.ylim(0, 0.2)
+
     ax.legend()
     plt.show()
 
 
 if __name__ == '__main__':
     plot_words(('abuse', 'black', 'kill'), sense_id_w1=2, sense_id_w2=2, sense_id_w3=2, fit='bspline')
-    # plot_word('abuse', fit='bspline')
-
-    # p = PolynomialFitting('abuse')
-    # from scipy import interpolate
-    # import matplotlib.pyplot as plt
-    # import numpy as np
-    #
-    # y = [0, 1, 3, 4, 3, 5, 7, 5, 2, 3, 4, 8, 9, 8, 7]
-    # n = len(y)
-    # x = range(0, n)
-    #
-    # tck = interpolate.splrep(x, y, s=0, k=3)
-    # # x_new = np.linspace(min(x), max(x), 100)
+    plot_word('abuse', fit='bspline')

@@ -1,10 +1,10 @@
 
 from pydantic import BaseSettings, Field
 from dotenv import load_dotenv
+import logging
+import json
 
 load_dotenv(verbose=True)
-
-
 class OxfordAPISettings(BaseSettings):
     accept:str = Field(..., env="ACCEPT")
     app_id:str = Field(..., env="APP_ID")
@@ -28,6 +28,31 @@ class EmbeddingFiles(BaseSettings):
     years_used = [1980, 1982, 1985, 1987, 1989, 1990, 1995, 2000, 2001, 2002, 2003, 2005, 2008, 2009, 2010, 2012,
                      2013, 2015, 2016, 2017, 2018]
 
+class FileLoader():
+    @classmethod
+    def load_files(
+            cls,
+            module:str,
+        ):
+        if not module in ['Similarities']:
+            raise ValueError(
+                f'The module {module} does not exist'
+            )
+
+        logging.basicConfig(level=logging.NOTSET)
+        files = EmbeddingFiles()
+        if module == 'Similarities':
+            with open(files.sense_embeddings, 'r') as f:
+                logging.info(f'{"-" * 10} Loading the embeddings for senses: {f.name} {"-" * 10}')
+                senses_embeds = json.load(f)
+
+            with open(files.poly_words_f, 'r') as f:
+                words = f.read()
+
+            return senses_embeds, words
+
+
+
 if __name__ == '__main__':
-    print(OxfordAPISettings())
+    print(FileLoader.load_files('Similarities'))
 

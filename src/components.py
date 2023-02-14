@@ -16,6 +16,8 @@ class OxfordAPIResponse(BaseModel):
         self.definition = kwargs['definition']
         self.examples = kwargs['examples']
 
+        return self
+
     @validator('examples')
     def min_len_examples(cls, v):
         if not len(v) >= 1:
@@ -38,12 +40,19 @@ class WordFitted(BaseModel):
 
 
 class SenseEmbedding(BaseModel):
-    id: str
-    definition: str
-    embedding: List[float]
+    id: str = None
+    definition: str = None
+    embedding: List[float] = None
 
     class Config:
         allow_population_by_field_name = True
+
+    def __call__(self, **kwargs):
+        self.id = kwargs['id']
+        self.definition = kwargs['definition']
+        self.embedding = kwargs['embedding']
+
+        return self
 
 
 class Embedding(BaseModel):
@@ -53,3 +62,10 @@ class Embedding(BaseModel):
 
     class Config:
         allow_population_by_field_name = True
+
+    def __call__(self, **kwargs):
+        self.word = kwargs['word']
+        self.sentence_number_index = kwargs['sentence_number_index']
+        self.embeddings = kwargs['embeddings']
+
+        return self
