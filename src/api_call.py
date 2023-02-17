@@ -139,5 +139,7 @@ class OxfordDictAPI():
         return self.oxford_word
 
 
+
 if __name__ == '__main__':
     print(OxfordDictAPI('abuse').get_senses())
+    
