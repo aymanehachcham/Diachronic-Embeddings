@@ -3,6 +3,7 @@ from pydantic import BaseSettings, Field
 from dotenv import load_dotenv
 import logging
 import json
+from tqdm import tqdm
 
 load_dotenv(verbose=True)
 class OxfordAPISettings(BaseSettings):
