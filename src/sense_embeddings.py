@@ -1,11 +1,9 @@
 
 
 import torch
-import json
-from transformers import BertTokenizer, BertModel
+from transformers import BertTokenizer, BertModel, AutoTokenizer
 from transformers import logging
-from settings import EmbeddingFiles
-from components import SenseEmbedding, OxfordAPIResponse
+from components import OxfordAPIResponse
 from settings import FileLoader
 
 
@@ -107,9 +105,12 @@ class ExtractSenseEmbeddings():
 
 if __name__ == '__main__':
     import json
-    e = ExtractSenseEmbeddings()
-    with open('../embeddings/embeddings_for_senses.json', 'w') as f:
-            json.dump(e.create_sense_embeddings(), f, indent=4)
+
+    VectorEmbeddings().infer_vector('Hello my name is', 'hello')
+
+    # e = ExtractSenseEmbeddings()
+    # with open('../embeddings/embeddings_for_senses.json', 'w') as f:
+    #         json.dump(e.create_sense_embeddings(), f, indent=4)
 
 
 

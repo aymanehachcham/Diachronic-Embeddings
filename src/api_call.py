@@ -8,9 +8,16 @@ from nltk import WordNetLemmatizer
 from settings import OxfordAPISettings
 import logging
 from components import OxfordAPIResponse
+from typing import List
 
 
 class OxfordDictAPI():
+    """
+    Class to retrieve sentences for each word's sens.
+
+    Attributes:
+        word_id: The word we want the examples for
+    """
     def __init__(
             self,
             word_id: str
@@ -46,7 +53,15 @@ class OxfordDictAPI():
         self.senses = []
         self.oxford_word = {}
 
-    def _load_into_json(self, res: Response):
+    def _load_into_json(self, res: Response) -> Dict:
+        """
+        Load the request into json usable object
+        Args:
+            res: Response object
+
+        Returns:
+            A dict with all the Oxford API objects
+        """
         res.raise_for_status()
         if not res.status_code == 200:
             raise ValueError(
@@ -55,7 +70,15 @@ class OxfordDictAPI():
         json_output = json.dumps(res.json())
         return json.loads(json_output)
 
-    def _lemmatize_token(self, tkn):
+    def _lemmatize_token(self, tkn:str) -> str:
+        """
+        Lematize the given token
+        Args:
+            tkn: Given token to lematize
+
+        Returns:
+            The lematized token
+        """
         if self.lemmatizer.lemmatize(tkn, pos='n') != tkn:
             return self.lemmatizer.lemmatize(tkn, pos='n')
         if self.lemmatizer.lemmatize(tkn, pos='v') != tkn:
@@ -63,7 +86,16 @@ class OxfordDictAPI():
         return self.lemmatizer.lemmatize(tkn, pos='a')
 
 
-    def _preprocessing(self, sentence:str, main_word:str):
+    def _preprocessing(self, sentence:str, main_word:str) -> str:
+        """
+        Search the sentence given and change the main word into its stem
+        Args:
+            sentence:
+            main_word: Word with inflections
+
+        Returns:
+            The stemmed word version
+        """
         words = sentence.split()
         for idx, w in enumerate(words):
             if re.search(main_word[:3], w.lower()):
@@ -71,6 +103,13 @@ class OxfordDictAPI():
         return ' '.join(words)
 
     def _yield_component(self) -> Dict:
+        """
+        Yield's back an OxfordAPI object with:
+            - word key: the main word
+            - senses: A list of the different senses, definitions and examples from each sense
+        Returns:
+            An OxfordAPI object
+        """
         logging.info(
             f'{"-" * 20} Extracting sentence examples from the Oxford API for the desired word: "{self.word}" {"-" * 20}')
 
