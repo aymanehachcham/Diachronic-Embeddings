@@ -73,3 +73,9 @@ class FileLoader():
 if __name__ == '__main__':
     print(FileLoader.load_files('Similarities'))
 
+
+
+
+
+
+
