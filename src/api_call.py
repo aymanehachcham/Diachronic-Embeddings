@@ -180,5 +180,18 @@ class OxfordDictAPI():
 
 
 if __name__ == '__main__':
-    print(OxfordDictAPI('abuse').get_senses())
+    print(OxfordDictAPI('struggle').get_senses())
+
+    
+    
+
+    
+    
+    
+    
+
+
+
+
+
     
