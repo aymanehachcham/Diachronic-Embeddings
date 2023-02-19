@@ -17,3 +17,4 @@ embeddings_similarity/
 .DS_Store
 src/API_credentials/
 .env
+src/bert_model/

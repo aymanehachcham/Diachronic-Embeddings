@@ -180,11 +180,7 @@ class OxfordDictAPI():
 
 
 if __name__ == '__main__':
-    print(OxfordDictAPI('lola').get_senses())
-
-    # Create a code to remove phone numbers from a sentence
-    def remove_phone_numbers(sentence):
-        return re.sub(r'\d{3}-\d{3}-\d{4}', '', sentence)
+    print(OxfordDictAPI('struggle').get_senses())
 
     
     
