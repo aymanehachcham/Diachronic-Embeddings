@@ -18,3 +18,4 @@ embeddings_similarity/
 src/API_credentials/
 .env
 src/bert_model/
+data/all_sentences.txt
