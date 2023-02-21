@@ -1,13 +1,23 @@
 
-
 import torch
-from transformers import BertTokenizer, BertModel, AutoTokenizer
+from transformers import BertTokenizer, BertModel
 from transformers import logging
 from components import OxfordAPIResponse
 from settings import FileLoader
+import json
 
 
 class VectorEmbeddings():
+    """
+    This class is used to infer the vector embeddings of a word from a sentence.
+
+    Methods
+    -------
+        infer_vector(doc:str, main_word:str)
+            This method is used to infer the vector embeddings of a word from a sentence.
+        _bert_case_preparation()
+            This method is used to prepare the BERT model for the inference.
+    """
     def __init__(
         self
     ):
@@ -32,6 +42,7 @@ class VectorEmbeddings():
         self.model.eval()
         self.vocab = True
 
+    # Generate the vector embeddings for the main word in the sentence
     def infer_vector(self, doc:str, main_word:str):
         if not self.vocab:
             raise ValueError(
@@ -60,6 +71,34 @@ class VectorEmbeddings():
 
 
 class ExtractSenseEmbeddings():
+    """
+    Wrapper class for the Vector embeddings that is used to extract the embeddings for all the senses.
+
+    Attributes
+    ----------
+        sense: dict
+            The sense for which the embeddings are to be extracted.
+        word: str
+            The word for which the embeddings are to be extracted.
+        vector_embeddings: VectorEmbeddings
+            The class that is used to extract the embeddings.
+        api_component: OxfordAPIResponse
+            The class that is used to extract the senses.
+        all_words: list
+            The list of all the words for which the embeddings are to be extracted.
+
+    Methods
+    -------
+        __call__(sense:dict, main_w:str)
+            This method is used to initialize the object.
+        _infer_sentence_vector()
+            This method is used to infer the vector embeddings for all the sentences in the sense.
+        infer_mean_vector()
+            This method is used to infer the mean vector embeddings for all the sentences in the sense.
+        create_sense_embeddings()
+            This method is used to extract the embeddings for all the senses.
+
+    """
     def __init__(
             self
         ):
@@ -104,13 +143,9 @@ class ExtractSenseEmbeddings():
 
 
 if __name__ == '__main__':
-    import json
-
-    VectorEmbeddings().infer_vector('Hello my name is', 'hello')
-
-    # e = ExtractSenseEmbeddings()
-    # with open('../embeddings/embeddings_for_senses.json', 'w') as f:
-    #         json.dump(e.create_sense_embeddings(), f, indent=4)
+    e = ExtractSenseEmbeddings()
+    with open('../embeddings/embeddings_for_senses.json', 'w') as f:
+            json.dump(e.create_sense_embeddings(), f, indent=4)
 
 
 
