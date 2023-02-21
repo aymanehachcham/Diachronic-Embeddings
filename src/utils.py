@@ -1,10 +1,9 @@
 
 import json
-import logging
 import os
 import time
 
-from src.api_call import OxfordDictAPI
+from src.api.api_call import OxfordDictAPI
 from settings import EmbeddingFiles
 
 def create_sens_embeddings(path:str):
