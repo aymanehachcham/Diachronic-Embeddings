@@ -7,8 +7,39 @@ from settings import EmbeddingFiles, FileLoader
 import logging
 import numpy as np
 from collections import Counter
+from typing import List
 
 class Similarities():
+    """
+    Class that computes the similarity between the embeddings of the words and the embeddings of the senses
+
+    Attributes
+    ----------
+        files: EmbeddingFiles
+            EmbeddingFiles object that contains the paths to the files
+        embedding_component: Embedding
+            Embedding object that contains the word and the embeddings
+        sense_component: SenseEmbedding
+            SenseEmbedding object that contains the sense id and the embeddings
+        embeddings_senses: List[Dict]
+            List of dictionaries that contains the word and the senses
+        words: str
+            The list of all the words in the embeddings_senses file
+        embeddings_examples: List[Dict]
+            List of dictionaries that contains the word and the embeddings
+
+    Methods
+    -------
+        _lookup_examples_that_match(words: str) -> List[Embedding]
+            Returns the embeddings of the words that are present in the embeddings_examples file
+        _search_word_sense(main_word: str) -> List[SenseEmbedding]
+            Returns the senses of the word that are present in the embeddings_senses file
+        _cos_sim(vect_a: np.array, vect_b: np.array) -> float
+            Returns the cosine similarity between two vectors
+        __call__(main_word: str, year: int, path_embeddings_file: str) -> None
+            Computes the similarity between the embeddings of the words and the embeddings of the senses
+
+    """
     def __init__(
             self,
         ):
@@ -23,7 +54,16 @@ class Similarities():
         self.word_sense_proportions = {}
 
 
-    def _lookup_examples_that_match(self, words):
+    def _lookup_examples_that_match(self, words:List[str]) -> List[Embedding]:
+        """
+        Returns the embeddings of the words that are present in the embeddings_examples file
+        Args:
+            words: List[str]
+
+        Returns:
+            List[Embedding]
+
+        """
         if self.embeddings_examples is None:
             raise ValueError(
                 'Embedding examples not initialized'
@@ -36,6 +76,14 @@ class Similarities():
             yield next(self.embedding_component(**e) for e in self.embeddings_examples if word == e['word'])
 
     def _search_word_sense(self, main_word:str):
+        """
+        Returns the senses of the word that are present in the embeddings_senses file
+        Args:
+            main_word: str
+
+        Returns:
+            List[SenseEmbedding]
+        """
         for w in self.embeddings_senses:
             if not w['word'] == main_word:
                 continue
@@ -43,6 +91,15 @@ class Similarities():
 
 
     def _cos_sim(self, vect_a:np.array, vect_b:np.array):
+        """
+        Returns the cosine similarity between two vectors
+        Args:
+            vect_a: np.array
+            vect_b: np.array
+
+        Returns:
+            float
+        """
         return (vect_a @ vect_b)/(norm(vect_a) * norm(vect_b))
 
     def __call__(self, main_word:str, year:int, path_embeddings_file:str):
@@ -75,6 +132,13 @@ class Similarities():
 
 
 def sim_on_all_words():
+    """
+    Computes the similarity between the embeddings of the words and the embeddings of the senses
+
+    Returns:
+        None
+
+    """
     sim = Similarities()
 
     with open(sim.files.poly_words_f, 'r') as f:
