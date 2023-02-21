@@ -12,11 +12,14 @@ from typing import List
 
 
 class OxfordDictAPI():
+    # write a detailed comment on the OxfordDictAPI class
     """
-    Class to retrieve sentences for each word's sens.
+    Wrapper class for the Oxford Dictionary API. It retrieves the senses and examples for a given word.
 
     Attributes:
-        word_id: The word we want the examples for
+    ----------
+        word_id: str
+            The word we want the examples for
     """
     def __init__(
             self,
@@ -37,7 +40,6 @@ class OxfordDictAPI():
 
         self.url_entries = self.url_ent + self.word + self.strict_match
         self.url_sentences = self.url_sent + self.word + self.strict_match
-        self.lemmatizer = WordNetLemmatizer()
 
         self.res_entries = requests.get(
             self.url_entries,
@@ -98,6 +100,8 @@ class OxfordDictAPI():
         logging.info(
             f'{"-" * 20} Extracting sentence examples from the Oxford API for the desired word: "{self.word}" {"-" * 20}')
 
+        # Load the response into json
+        # Create the senses and sentences objects
         self.senses_examples = self._load_into_json(self.res_entries)
         self.sentences_examples = self._load_into_json(self.res_sentences)
 
@@ -106,12 +110,14 @@ class OxfordDictAPI():
                 f'No results from the Oxford API for the word: "{self.word}"'
             )
 
+        # Create a list of all the senses by iterating over the sentences object
         senses_all_res = self.senses_examples['results']
         sentences_all_res = self.sentences_examples['results']
 
         sense_with_examples = {}
         diff_sense_ids = []
 
+        # Iterate over the sentences object and create a list of the different sense ids
         for res_s in sentences_all_res:
             for ent in res_s['lexicalEntries']:
                 for el in ent['sentences']:
@@ -119,12 +125,15 @@ class OxfordDictAPI():
 
         sense_ids = set(diff_sense_ids)
 
+        # Return the sentences for a given sense id
         def search(id):
             for res_s in sentences_all_res:
                 for ent in res_s['lexicalEntries']:
                     return [self._preprocessing(sent['text'], self.word) for sent in ent['sentences'] if
                             sent['senseIds'][0] == id]
 
+        # Iterate over the senses object and create a list of the different senses, definitions and examples
+        # Yield the OxfordAPI object
         for res in senses_all_res:
             for lent in res['lexicalEntries']:
                 for ent in lent['entries']:
@@ -154,6 +163,11 @@ class OxfordDictAPI():
                             continue
 
     def get_senses(self) -> Dict:
+        """
+        Retrieve all senses anf examples for a given word
+        Returns:
+            A dict with the word and the senses
+        """
         self.oxford_word['word'] = self.word
         self.oxford_word['senses'] = list(self._yield_component())
         if self.oxford_word['senses'] == []:
