@@ -8,6 +8,26 @@ from transformers import BertForMaskedLM, AdamW, AutoTokenizer
 import logging
 
 class NewsExamplesDataset(Dataset):
+    """
+    Dataset generator for the news examples
+
+    Attributes
+    ----------
+        examples: List[str]
+            List of the examples
+        words_to_mask: List[str]
+            List of the words to mask
+
+    Methods
+    -------
+        _pick_masked_embeddings(self, encodings: Dict[str, List[int]]) -> List[int]
+            Returns the masked embeddings
+        __len__(self) -> int
+            Returns the length of the dataset
+        __getitem__(self, idx: int) -> Dict[str, torch.Tensor]
+            Returns the item at the given index
+
+    """
     def __init__(self,
                  examples:List[str],
                  words_to_mask: List[str],
@@ -26,7 +46,17 @@ class NewsExamplesDataset(Dataset):
         self.masked_embeddings = self._pick_masked_embeddings(self.encodings['input_ids'])
         self.max_length = chunk_size
 
-    def _pick_masked_embeddings(self, inputs:torch.Tensor, percentage_size=0.5):
+    def _pick_masked_embeddings(self, inputs:torch.Tensor, percentage_size=0.15):
+        """
+        Returns the list of embeddings that will be masked
+        Args:
+            inputs: torch.Tensor
+                The input tensor
+            percentage_size: float
+                The percentage of the embeddings to mask
+        Returns:
+            List[torch.Tensor]
+        """
         dim = inputs.shape[0]
         idx = np.random.choice(list(range(dim)), int(dim * percentage_size), replace=False)
         docs = inputs[idx]
@@ -47,6 +77,23 @@ class NewsExamplesDataset(Dataset):
         return self.encodings.input_ids.shape[0]
 
 class BertTrainor():
+    """
+    Class for training the Bert model
+
+    Attributes
+    ----------
+        train_dataset: NewsExamplesDataset
+            The dataset to train on
+        device: str
+            The device to train on
+        epochs: int
+            The number of epochs to train for
+
+    Methods
+    -------
+        train(self)
+            Trains the model
+    """
     def __init__(
             self,
             train_dataset,
