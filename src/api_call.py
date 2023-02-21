@@ -70,21 +70,6 @@ class OxfordDictAPI():
         json_output = json.dumps(res.json())
         return json.loads(json_output)
 
-    def _lemmatize_token(self, tkn:str) -> str:
-        """
-        Lematize the given token
-        Args:
-            tkn: Given token to lematize
-
-        Returns:
-            The lematized token
-        """
-        if self.lemmatizer.lemmatize(tkn, pos='n') != tkn:
-            return self.lemmatizer.lemmatize(tkn, pos='n')
-        if self.lemmatizer.lemmatize(tkn, pos='v') != tkn:
-            return self.lemmatizer.lemmatize(tkn, pos='v')
-        return self.lemmatizer.lemmatize(tkn, pos='a')
-
 
     def _preprocessing(self, sentence:str, main_word:str) -> str:
         """
