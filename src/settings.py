@@ -3,7 +3,9 @@ from pydantic import BaseSettings, Field
 from dotenv import load_dotenv
 import logging
 import json
-from tqdm import tqdm
+from pydantic import parse_obj_as
+from typing import List
+from components import Words
 
 load_dotenv(verbose=True)
 class OxfordAPISettings(BaseSettings):
@@ -56,7 +58,7 @@ class FileLoader():
             return senses_embeds, words
 
         if module == 'ExtractSenseEmbeddings':
-            with open(files.oxford_word_senses) as f: all_words = json.load(f)
+            with open(files.oxford_word_senses) as f: all_words = parse_obj_as(List[Words], json.load(f))
             return all_words
 
         if module == 'PolynomialFitting':

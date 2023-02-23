@@ -1,10 +1,11 @@
 
 import torch
 from transformers import BertTokenizer, BertModel
-from transformers import logging
-from components import OxfordAPIResponse
+from transformers import logging as lg
+from components import OxfordAPIResponse, SenseEmbedding
 from settings import FileLoader
 import json
+import logging
 
 
 class VectorEmbeddings():
@@ -19,21 +20,33 @@ class VectorEmbeddings():
             This method is used to prepare the BERT model for the inference.
     """
     def __init__(
-        self
+        self,
+        model_path:str=None,
     ):
+        self.model_path = model_path
         self._tokens = []
         self.model = None
         self.vocab = False
         self.lematizer = None
 
-        logging.set_verbosity_error()
+        lg.set_verbosity_error()
         self._bert_case_preparation()
 
     @property
     def tokens(self):
         return self._tokens
 
-    def _bert_case_preparation(self):
+    def _bert_case_preparation(self) -> None:
+        if self.model_path is not None:
+            self.bert_tokenizer = BertTokenizer.from_pretrained(self.model_path)
+            self.model = BertModel.from_pretrained(
+                self.model_path,
+                output_hidden_states = True,
+            )
+            self.model.eval()
+            self.vocab = True
+            return
+
         self.bert_tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
         self.model = BertModel.from_pretrained(
             'bert-base-uncased',
@@ -51,7 +64,7 @@ class VectorEmbeddings():
         marked_text = "[CLS] " + doc + " [SEP]"
         tokens = self.bert_tokenizer.tokenize(marked_text)
         try:
-            main_token_id = tokens.index(main_word)
+            main_token_id = tokens.index(main_word.lower())
             idx = self.bert_tokenizer.convert_tokens_to_ids(tokens)
             segment_id = [1] * len(tokens)
 
@@ -109,16 +122,16 @@ class ExtractSenseEmbeddings():
         self.all_words = FileLoader.load_files(self.__class__.__name__)
 
     def __call__(self, sense:dict, main_w):
-        if not isinstance(sense, dict):
+        if not isinstance(sense, OxfordAPIResponse):
             raise ValueError(
-                f'Expected type dict for the sense, but got type: {type(sense)}'
+                f'Expected type {OxfordAPIResponse.__class__} for the sense, but got type: {type(sense)}'
             )
         self.sense = sense
         self.word = main_w
         return self
 
     def _infer_sentence_vector(self):
-        for example in self.sense['examples']:
+        for example in self.sense.examples:
             yield self.vector_embeddings.infer_vector(
                 doc=example,
                 main_word=self.word
@@ -126,34 +139,27 @@ class ExtractSenseEmbeddings():
 
     def infer_mean_vector(self):
         all_token_embeddings =  torch.stack(list(self._infer_sentence_vector()))
-        self.sense.pop('examples', None)
-        self.sense['embedding'] = torch.mean(all_token_embeddings, dim=0).tolist()
-
-        return self.sense
+        return SenseEmbedding(
+            id=self.sense.id,
+            definition=self.sense.definition,
+            embeddings=torch.mean(all_token_embeddings, dim=0).tolist(),
+        )
 
     def create_sense_embeddings(self):
         all_embeddings = []
+        word_embedding = {}
         for word in self.all_words:
-            print(f'{"-"*40} Embedding the word {word["word"]} {"-"*40} ')
-            word['senses'] = [self(sens, word["word"]).infer_mean_vector() for sens in word['senses']]
-            all_embeddings += [word.copy()]
+            logging.info(f'{"-"*40} Embedding the word {word.word} {"-"*40} ')
+            word_embedding['word'] = word.word
+            word_embedding['senses'] = [self(sens, word.word).infer_mean_vector() for sens in word.senses]
+            all_embeddings += [word_embedding.copy()]
 
         return all_embeddings
 
 
 
 if __name__ == '__main__':
-    e = ExtractSenseEmbeddings()
-    with open('../embeddings/embeddings_for_senses.json', 'w') as f:
-            json.dump(e.create_sense_embeddings(), f, indent=4)
-
-
-
-
-
-
-
-
-
-
-
+    # print(VectorEmbeddings(model_path='bert_model_new').infer_vector('Hello my name is John', 'john'))
+    # with open('../embeddings/embeddings_for_senses.json', 'w') as f:
+    #         json.dump(e.create_sense_embeddings(), f, indent=4)
+    pass
