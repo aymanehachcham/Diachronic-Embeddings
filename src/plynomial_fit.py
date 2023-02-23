@@ -9,6 +9,7 @@ import warnings
 from settings import EmbeddingFiles, FileLoader
 
 
+
 class PolynomialFitting:
     def __init__(
             self,
