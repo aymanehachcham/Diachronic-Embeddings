@@ -2,6 +2,7 @@
 from pydantic import BaseModel, validator, Field
 from typing import List, Optional
 import numpy as np
+from dataclasses import dataclass
 
 class OxfordAPIResponse(BaseModel):
     id:str = None
@@ -25,6 +26,12 @@ class OxfordAPIResponse(BaseModel):
                 f'Not Enough examples to compile, given: {len(v)}, expected at least 1'
             )
         return v[:10]
+
+@dataclass(init=True, frozen=True, repr=True)
+class Words:
+    word:str
+    senses:List[OxfordAPIResponse]
+
 
 class WordSimilarities(BaseModel):
     word:str

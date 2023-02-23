@@ -3,7 +3,9 @@ from pydantic import BaseSettings, Field
 from dotenv import load_dotenv
 import logging
 import json
-from tqdm import tqdm
+from pydantic import parse_obj_as
+from typing import List
+from components import Words
 
 load_dotenv(verbose=True)
 class OxfordAPISettings(BaseSettings):
@@ -26,6 +28,7 @@ class EmbeddingFiles(BaseSettings):
     oxford_word_senses: str = '../data/target_words/senses_oxford_api.json'
     sense_embeddings: str = '../embeddings/embeddings_for_senses.json'
     embeddings_root_dit:str = '../embeddings'
+    bert_model:str = 'bert_model_new'
     years_used = [1980, 1982, 1985, 1987, 1989, 1990, 1995, 2000, 2001, 2002, 2003, 2005, 2008, 2009, 2010, 2012,
                      2013, 2015, 2016, 2017, 2018]
 
@@ -55,7 +58,7 @@ class FileLoader():
             return senses_embeds, words
 
         if module == 'ExtractSenseEmbeddings':
-            with open(files.oxford_word_senses) as f: all_words = json.load(f)
+            with open(files.oxford_word_senses) as f: all_words = parse_obj_as(List[Words], json.load(f))
             return all_words
 
         if module == 'PolynomialFitting':
