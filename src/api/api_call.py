@@ -5,9 +5,9 @@ from typing import Dict
 from itertools import chain
 import re
 from nltk import WordNetLemmatizer
-from settings import OxfordAPISettings
+from src.settings  import OxfordAPISettings
 import logging
-from components import OxfordAPIResponse
+from src.components import OxfordAPIResponse
 from typing import List
 
 
@@ -164,7 +164,7 @@ class OxfordDictAPI():
 
     def get_senses(self) -> Dict:
         """
-        Retrieve all senses anf examples for a given word
+        Retrieve all senses and examples for a given word
         Returns:
             A dict with the word and the senses
         """
