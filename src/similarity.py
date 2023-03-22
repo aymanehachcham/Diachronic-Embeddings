@@ -127,7 +127,7 @@ class Similarities():
 def sim_on_all_words():
     """
     Computes the similarity between the embeddings of the words and the embeddings of the senses
-
+    Add some comments
     Returns:
         None
 
