@@ -64,7 +64,7 @@ class FileLoader():
         if module == 'PolynomialFitting':
             if not file_keyword in words.split('\n'):
                 raise ValueError(
-                    f'The specified keyword: {file_keyword} does not apply to any similarity embedding file'
+                    f'The specified keyword: "{file_keyword}" does not apply to any similarity embedding file'
                 )
 
             with open(f'../embeddings_similarity/embeddings_sim_{file_keyword}.json') as f:

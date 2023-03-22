@@ -87,6 +87,7 @@ def plot_word(word:str, fit:Literal['polynomial', 'bspline']):
             ax.plot(sense['years'], sense['distribution'], f'{obj}', label=f'{word}, for the sense: {sense["sense_id"]}')
             ax.plot(xp, sense['y_fit'], '-')
 
+    ax.title.set_text(f'Word: {word}')
     ax.legend()
     plt.show()
 
@@ -135,5 +136,5 @@ def plot_words(words:tuple, sense_id_w1:int, sense_id_w2:int, sense_id_w3:int, f
 
 
 if __name__ == '__main__':
-    plot_words(('abuse', 'black', 'kill'), sense_id_w1=2, sense_id_w2=2, sense_id_w3=2, fit='bspline')
-    # plot_word('abuse', fit='bspline')
+    # plot_words(('abuse', 'black', 'kill'), sense_id_w1=2, sense_id_w2=2, sense_id_w3=2, fit='bspline')
+    plot_word('abuse', fit='bspline')
