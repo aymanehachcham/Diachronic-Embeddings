@@ -62,6 +62,17 @@ class SenseEmbedding(BaseModel):
         return self
 
 
+@dataclass(init=True, frozen=True, repr=True)
+class WordSenseEmbedding:
+    id: str
+    definition: str
+    embedding: List[float]
+
+@dataclass(init=True, frozen=True, repr=True)
+class SenseEmbedding:
+    word:str
+    senses:List[WordSenseEmbedding]
+
 class Embedding(BaseModel):
     word: str = None
     sentence_number_index: List[List] = None

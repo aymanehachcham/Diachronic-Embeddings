@@ -19,3 +19,4 @@ src/API_credentials/
 .env
 src/bert_model_new/
 data/all_sentences.txt
+*.pyc

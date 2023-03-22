@@ -2,12 +2,13 @@
 import os
 import json
 from numpy.linalg import norm
-from components import Embedding, SenseEmbedding
+from components import Embedding, WordSenseEmbedding, SenseEmbedding
 from settings import EmbeddingFiles, FileLoader
 import logging
 import numpy as np
 from collections import Counter
 from typing import List
+from pydantic import parse_obj_as
 
 class Similarities():
     """
@@ -46,7 +47,6 @@ class Similarities():
 
         self.files = EmbeddingFiles()
         self.embedding_component = Embedding()
-        self.sense_component = SenseEmbedding()
         self.embeddings_senses, self.words = FileLoader.load_files(self.__class__.__name__)
 
         self.embeddings_examples = None
@@ -54,12 +54,9 @@ class Similarities():
         self.word_sense_proportions = {}
 
 
-    def _lookup_examples_that_match(self, words:List[str]) -> List[Embedding]:
+    def _lookup_examples_that_match(self) -> List[Embedding]:
         """
         Returns the embeddings of the words that are present in the embeddings_examples file
-        Args:
-            words: List[str]
-
         Returns:
             List[Embedding]
 
@@ -69,13 +66,12 @@ class Similarities():
                 'Embedding examples not initialized'
             )
 
-        embeddings = []
-        for embed in self.embeddings_examples:
-            embeddings += [embed['word']]
-        for word in list(set(embeddings) & set(words.split('\n'))):
-            yield next(self.embedding_component(**e) for e in self.embeddings_examples if word == e['word'])
+        embeddings = [embed.word for embed in self.embeddings_examples]
+        for word in list(set(embeddings) & set(self.words.split('\n'))):
+            yield next(e for e in self.embeddings_examples if word == e.word)
 
-    def _search_word_sense(self, main_word:str):
+
+    def _search_word_sense(self, main_word:str) -> List[WordSenseEmbedding]:
         """
         Returns the senses of the word that are present in the embeddings_senses file
         Args:
@@ -85,10 +81,10 @@ class Similarities():
             List[SenseEmbedding]
         """
         for w in self.embeddings_senses:
-            if not w['word'] == main_word:
+            if not w.word == main_word:
                 continue
-            return [self.sense_component(**s) for s in w['senses']]
 
+            return w.senses
 
     def _cos_sim(self, vect_a:np.array, vect_b:np.array):
         """
@@ -103,20 +99,17 @@ class Similarities():
         return (vect_a @ vect_b)/(norm(vect_a) * norm(vect_b))
 
     def __call__(self, main_word:str, year:int, path_embeddings_file:str):
+        w_senses = self._search_word_sense(main_word)
+        if len(w_senses) == 0:
+            raise TypeError(f'The word {main_word} is not present in the embeddings_senses file')
+
         print(f'{"-" * 10} Computing Similarities for the word {main_word} {"-" * 10}')
 
         with open(os.path.join(self.root_dir, path_embeddings_file), 'r') as f:
             logging.info(f'{"-" * 10} Loading the embeddings examples file: {f.name} {"-" * 10}')
-            self.embeddings_examples = json.load(f)
+            self.embeddings_examples = parse_obj_as(List[Embedding], json.load(f))
 
-        self.all_embeddings = list(self._lookup_examples_that_match(self.words))
-
-        try:
-            w_senses = self._search_word_sense(main_word)
-        except StopIteration:
-            raise ValueError(
-                f'Word {main_word} not present in the list of words'
-            )
+        self.all_embeddings = list(self._lookup_examples_that_match())
 
         all_sims = []
         for embed in self.all_embeddings:
@@ -144,18 +137,15 @@ def sim_on_all_words():
     with open(sim.files.poly_words_f, 'r') as f:
         words = f.read()
 
-    for w_ in words.split('\n')[:1]:
+    for w_ in words.split('\n'):
         s = []
-        for year in [1980]:
-
+        for year in sim.files.years_used:
             s += [sim(w_, year, path_embeddings_file=f'embeddings_{year}.json')]
 
-        with open(f'../embeddings_similarity/embeddings_sim_{"w_"}.json', 'w') as f:
+        with open(f'../embeddings_similarity/embeddings_sim_{w_}.json', 'w') as f:
             json.dump(s, f, indent=4)
-        break
 
 
 if __name__ == '__main__':
     sim_on_all_words()
-
 

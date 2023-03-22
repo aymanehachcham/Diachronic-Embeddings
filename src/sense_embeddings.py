@@ -55,11 +55,10 @@ class VectorEmbeddings():
         self.model.eval()
         self.vocab = True
 
-    # Generate the vector embeddings for the main word in the sentence
     def infer_vector(self, doc:str, main_word:str):
         if not self.vocab:
             raise ValueError(
-                'The Embedding model has not been initialized'
+                f'The Embedding model {self.model} has not been initialized'
             )
         marked_text = "[CLS] " + doc + " [SEP]"
         tokens = self.bert_tokenizer.tokenize(marked_text)

@@ -5,7 +5,7 @@ import logging
 import json
 from pydantic import parse_obj_as
 from typing import List
-from components import Words
+from components import Words, SenseEmbedding
 
 load_dotenv(verbose=True)
 class OxfordAPISettings(BaseSettings):
@@ -53,7 +53,7 @@ class FileLoader():
         if module == 'Similarities':
             with open(files.sense_embeddings, 'r') as f:
                 logging.info(f'{"-" * 10} Loading the embeddings for senses: {f.name} {"-" * 10}')
-                senses_embeds = json.load(f)
+                senses_embeds = parse_obj_as(List[SenseEmbedding], json.load(f))
 
             return senses_embeds, words
 
