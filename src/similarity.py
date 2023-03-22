@@ -119,6 +119,7 @@ class Similarities():
 
             self.word_sense_proportions['word'] = main_word
             self.word_sense_proportions['year'] = year
+            self.word_sense_proportions['sense_ids'] = list(map(lambda x: x[0], Counter(all_sims).most_common()))
             self.word_sense_proportions['props'] = list(map(lambda x: x[1]/len(all_sims), Counter(all_sims).most_common()))
 
         return self.word_sense_proportions.copy()
@@ -141,7 +142,7 @@ def sim_on_all_words():
         for year in sim.files.years_used:
             s += [sim(w_, year, path_embeddings_file=f'embeddings_{year}.json')]
 
-        with open(f'../embeddings_similarity/embeddings_sim_{w_}.json', 'w') as f:
+        with open(f'../embeddings_similarity/embeddings_sim_{"w_"}.json', 'w') as f:
             json.dump(s, f, indent=4)
 
 
